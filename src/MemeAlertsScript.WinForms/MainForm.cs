@@ -1,104 +1,157 @@
-﻿using MemeAlertsScript.Core.Models;
+﻿using MemeAlertsScript.Core.Extensions;
+using MemeAlertsScript.Core.Models;
 using MemeAlertsScript.Twitch;
 using MemeAlertsScript.WinForms.Configs;
+using MemeAlertsScript.WinForms.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace MemeAlertsScript.WinForms
 {
     public partial class MainForm : Form
     {
-        private TwitchSettings _config;
-        private EventSubListener _eventSub;
+        private readonly Configuration.AppSettings _config;
+        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger _logger;
+        private EventSubListener? _eventSub;
         private TwitchAuthTokens? _authTokens;
         private TwitchBroadcaster? _broadcaster;
 
         public MainForm()
         {
-            _config = Configuration.LoadTwitchSettings();
             InitializeComponent();
+
+            _config = Configuration.LoadAppSettings();
+            _loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.SetMinimumLevel(_config.Logging.LogLevel.ToLogLevelOrDefault());
+                builder.AddProvider(new RichTextBoxLoggerProvider(this.logsRichTextBox));
+            });
+
+            _logger = _loggerFactory.CreateLogger("Main");
+            _logger.LogDebug("MainForm initialized.");
         }
 
-        private async void MainForm_LoadAsync(object sender, EventArgs e)
+        private void MainForm_LoadAsync(object sender, EventArgs e)
         {
-
+            _logger.LogDebug("MainForm loaded.");
         }
 
         private async void MainForm_FormClosing(object sender, EventArgs e)
         {
-            if (_eventSub != null)
+            _logger.LogDebug("Application is closing...");
+
+            try
             {
-                _eventSub.OnRewardRedeemed -= OnRewardRedeemed;
-                await _eventSub.StopAsync(CancellationToken.None);
+                if (_eventSub != null)
+                {
+                    _logger.LogDebug("Stopping EventSub listener...");
+                    _eventSub.OnRewardRedeemed -= OnRewardRedeemed;
+                    await _eventSub.StopAsync(CancellationToken.None);
+                    _logger.LogDebug("EventSub listener stopped.");
+                }
+
+                _logger.LogDebug("Shutdown complete.");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Exception occurred during closing.");
             }
         }
 
         private async void buttonTwitchLogin_Click(object sender, EventArgs e)
         {
-            using var oauthForm = new OAuthForm(_config);
-            var dialogResult = oauthForm.ShowDialog();
+            _logger.LogInformation("Twitch login started.");
 
-            if (dialogResult == DialogResult.OK)
+            try
             {
-                _authTokens = oauthForm.AuthTokensResult;
-                _broadcaster = oauthForm.BroadcasterResult;
-                textBoxTwitchLogin.Text = _broadcaster!.Login!;
-                buttonTwitchLogin.Enabled = false;
-                buttonTwitchLogout.Enabled = true;
+                using var oauthForm = new OAuthForm(
+                    _config.Twitch.AppId,
+                    _config.Twitch.AppSecret,
+                    _config.Twitch.RedirectUri,
+                    _config.Twitch.Scopes,
+                    _loggerFactory.CreateLogger("Auth"));
 
-                var tokenPreview = _authTokens!.AccessToken?.Length >= 12
-                    ? _authTokens.AccessToken[..6] + "..." + _authTokens.AccessToken[^6..]
-                    : _authTokens.AccessToken ?? "";
-                logsRichTextBox.AppendText($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: Twitch OAuth success ({tokenPreview}).\n");
+                var dialogResult = oauthForm.ShowDialog();
 
-                var appToken = await TwitchTokenHelper.GetAppTokenAsync(_config.AppId, _config.AppSecret);
-                _eventSub = new EventSubListener(_config.AppId, appToken!, _broadcaster.Id!, _authTokens.AccessToken!);
-                _eventSub.OnRewardRedeemed += OnRewardRedeemed;
-                await _eventSub.StartAsync(CancellationToken.None);
+                if (dialogResult == DialogResult.OK)
+                {
+                    _authTokens = oauthForm.AuthTokensResult;
+                    _broadcaster = oauthForm.BroadcasterResult;
+                    textBoxTwitchLogin.Text = $"{_broadcaster!.Login} (ID: {_broadcaster.Id})";
+                    buttonTwitchLogin.Enabled = false;
+                    buttonTwitchLogout.Enabled = true;
+
+                    _logger.LogInformation("Twitch OAuth login successful.");
+                    _logger.LogInformation("Logged in as: {Login} (ID: {Id})", _broadcaster.Login, _broadcaster.Id);
+                    _logger.LogDebug("Access token: {Token}", _authTokens!.AccessToken.ToSecretPreview());
+
+                    _logger.LogInformation("Requesting application access token...");
+                    var appToken = await TwitchTokenHelper.GetAppTokenAsync(_config.Twitch.AppId, _config.Twitch.AppSecret);
+                    _logger.LogDebug("App token received: {AppToken}", appToken.ToSecretPreview());
+
+                    _eventSub = new EventSubListener(_config.Twitch.AppId, appToken!, _broadcaster.Id!, _authTokens.AccessToken!);
+                    _eventSub.OnRewardRedeemed += OnRewardRedeemed;
+
+                    _logger.LogInformation("Starting EventSub listener...");
+                    await _eventSub.StartAsync(CancellationToken.None);
+                    _logger.LogInformation("EventSub listener started.");
+                }
+                else
+                {
+                    _logger.LogWarning("Twitch OAuth login cancelled by user.");
+
+                    _authTokens = null;
+                    _broadcaster = null;
+                    textBoxTwitchLogin.Text = string.Empty;
+                    buttonTwitchLogin.Enabled = true;
+                    buttonTwitchLogout.Enabled = false;
+
+                    if (_eventSub != null)
+                    {
+                        _logger.LogInformation("Stopping EventSub listener (cleanup)...");
+                        _eventSub.OnRewardRedeemed -= OnRewardRedeemed;
+                        await _eventSub.StopAsync(CancellationToken.None);
+                        _logger.LogInformation("EventSub listener stopped.");
+                    }
+                }
             }
-            else
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Exception occurred during authorization.");
+            }
+        }
+
+        private async void buttonTwitchLogout_Click(object sender, EventArgs e)
+        {
+            _logger.LogInformation("Twitch logout requested.");
+
+            try
             {
                 _authTokens = null;
                 _broadcaster = null;
                 textBoxTwitchLogin.Text = string.Empty;
                 buttonTwitchLogin.Enabled = true;
                 buttonTwitchLogout.Enabled = false;
-                logsRichTextBox.AppendText($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: Twitch OAuth cancelled.\n");
-                
+
                 if (_eventSub != null)
                 {
+                    _logger.LogInformation("Stopping EventSub listener...");
                     _eventSub.OnRewardRedeemed -= OnRewardRedeemed;
                     await _eventSub.StopAsync(CancellationToken.None);
+                    _logger.LogInformation("EventSub listener stopped.");
                 }
+
+                _logger.LogInformation("Twitch OAuth logout completed.");
             }
-        }
-
-        private async void buttonTwitchLogout_Click(object sender, EventArgs e)
-        {
-            _authTokens = null;
-            _broadcaster = null;
-            textBoxTwitchLogin.Text = string.Empty;
-            buttonTwitchLogin.Enabled = true;
-            buttonTwitchLogout.Enabled = false;
-            logsRichTextBox.AppendText($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: Twitch OAuth logout.\n");
-
-            if (_eventSub != null)
+            catch (Exception exception)
             {
-                _eventSub.OnRewardRedeemed -= OnRewardRedeemed;
-                await _eventSub.StopAsync(CancellationToken.None);
+                _logger.LogError(exception, "Exception occurred during logout.");
             }
         }
 
         private void OnRewardRedeemed(string userName, string rewardTitle)
         {
-            if (logsRichTextBox.InvokeRequired)
-            {
-                logsRichTextBox.Invoke(new Action(() =>
-                    logsRichTextBox.AppendText($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: Reward redeemed: {userName} - {rewardTitle}.\n")
-                ));
-            }
-            else
-            {
-                logsRichTextBox.AppendText($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: Reward redeemed: {userName} - {rewardTitle}.\n");
-            }
+            _logger.LogInformation("Reward redeemed: {User} - {Reward}", userName, rewardTitle);
         }
     }
 }

@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MemeAlertsScript.Core\MemeAlertsScript.Core.csproj" />
     <ProjectReference Include="..\MemeAlertsScript.Twitch\MemeAlertsScript.Twitch.csproj" />
+    <ProjectReference Include="..\MemeAlertsScript.WinForms.Logging\MemeAlertsScript.WinForms.Logging.csproj" />
   </ItemGroup>
 
   <ItemGroup>
