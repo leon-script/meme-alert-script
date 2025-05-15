@@ -30,61 +30,115 @@ namespace MemeAlertsScript.WinForms
         /// </summary>
         private void InitializeComponent()
         {
+            groupBoxLogin = new GroupBox();
+            buttonTwitchLogout = new Button();
+            buttonTwitchLogin = new Button();
+            textBoxTwitchLogin = new TextBox();
             groupBoxSettings = new GroupBox();
             groupBoxActions = new GroupBox();
-            listBoxTwitch = new ListBox();
+            logsRichTextBox = new RichTextBox();
+            groupBoxLogin.SuspendLayout();
             groupBoxActions.SuspendLayout();
             SuspendLayout();
+            // 
+            // groupBoxLogin
+            // 
+            groupBoxLogin.Controls.Add(buttonTwitchLogout);
+            groupBoxLogin.Controls.Add(buttonTwitchLogin);
+            groupBoxLogin.Controls.Add(textBoxTwitchLogin);
+            groupBoxLogin.Dock = DockStyle.Top;
+            groupBoxLogin.Location = new Point(0, 0);
+            groupBoxLogin.Name = "groupBoxLogin";
+            groupBoxLogin.Size = new Size(692, 59);
+            groupBoxLogin.TabIndex = 0;
+            groupBoxLogin.TabStop = false;
+            groupBoxLogin.Text = "OAuth";
+            // 
+            // buttonTwitchLogout
+            // 
+            buttonTwitchLogout.Enabled = false;
+            buttonTwitchLogout.Location = new Point(121, 22);
+            buttonTwitchLogout.Name = "buttonTwitchLogout";
+            buttonTwitchLogout.Size = new Size(75, 23);
+            buttonTwitchLogout.TabIndex = 0;
+            buttonTwitchLogout.Text = "Logout";
+            buttonTwitchLogout.UseVisualStyleBackColor = true;
+            buttonTwitchLogout.Click += buttonTwitchLogout_Click;
+            // 
+            // buttonTwitchLogin
+            // 
+            buttonTwitchLogin.Location = new Point(12, 22);
+            buttonTwitchLogin.Name = "buttonTwitchLogin";
+            buttonTwitchLogin.Size = new Size(103, 23);
+            buttonTwitchLogin.TabIndex = 0;
+            buttonTwitchLogin.Text = "Login Twitch";
+            buttonTwitchLogin.UseVisualStyleBackColor = true;
+            buttonTwitchLogin.Click += buttonTwitchLogin_Click;
+            // 
+            // textBoxTwitchLogin
+            // 
+            textBoxTwitchLogin.Location = new Point(204, 22);
+            textBoxTwitchLogin.Name = "textBoxTwitchLogin";
+            textBoxTwitchLogin.ReadOnly = true;
+            textBoxTwitchLogin.Size = new Size(254, 23);
+            textBoxTwitchLogin.TabIndex = 3;
             // 
             // groupBoxSettings
             // 
             groupBoxSettings.Dock = DockStyle.Top;
-            groupBoxSettings.Location = new Point(0, 0);
+            groupBoxSettings.Location = new Point(0, 59);
             groupBoxSettings.Name = "groupBoxSettings";
-            groupBoxSettings.Size = new Size(692, 124);
-            groupBoxSettings.TabIndex = 0;
+            groupBoxSettings.Size = new Size(692, 177);
+            groupBoxSettings.TabIndex = 2;
             groupBoxSettings.TabStop = false;
             groupBoxSettings.Text = "Settings";
             // 
             // groupBoxActions
             // 
-            groupBoxActions.Controls.Add(listBoxTwitch);
+            groupBoxActions.Controls.Add(logsRichTextBox);
             groupBoxActions.Dock = DockStyle.Fill;
-            groupBoxActions.Location = new Point(0, 124);
+            groupBoxActions.Location = new Point(0, 236);
             groupBoxActions.Name = "groupBoxActions";
-            groupBoxActions.Size = new Size(692, 493);
-            groupBoxActions.TabIndex = 1;
+            groupBoxActions.Size = new Size(692, 504);
+            groupBoxActions.TabIndex = 3;
             groupBoxActions.TabStop = false;
             groupBoxActions.Text = "Actions";
             // 
-            // listBoxTwitch
+            // logsRichTextBox
             // 
-            listBoxTwitch.FormattingEnabled = true;
-            listBoxTwitch.ItemHeight = 15;
-            listBoxTwitch.Location = new Point(12, 22);
-            listBoxTwitch.Name = "listBoxTwitch";
-            listBoxTwitch.Size = new Size(361, 304);
-            listBoxTwitch.TabIndex = 0;
+            logsRichTextBox.Location = new Point(12, 22);
+            logsRichTextBox.Name = "logsRichTextBox";
+            logsRichTextBox.ReadOnly = true;
+            logsRichTextBox.Size = new Size(674, 358);
+            logsRichTextBox.TabIndex = 0;
+            logsRichTextBox.Text = "";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(692, 617);
+            ClientSize = new Size(692, 740);
             Controls.Add(groupBoxActions);
             Controls.Add(groupBoxSettings);
+            Controls.Add(groupBoxLogin);
             Name = "MainForm";
             Text = "meme-alerts-scripts";
-            FormClosing += this.MainForm_FormClosing;
+            FormClosing += MainForm_FormClosing;
             Load += MainForm_LoadAsync;
+            groupBoxLogin.ResumeLayout(false);
+            groupBoxLogin.PerformLayout();
             groupBoxActions.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
+        private GroupBox groupBoxLogin;
         private GroupBox groupBoxSettings;
         private GroupBox groupBoxActions;
-        private ListBox listBoxTwitch;
+        private Button buttonTwitchLogout;
+        private Button buttonTwitchLogin;
+        private TextBox textBoxTwitchLogin;
+        private RichTextBox logsRichTextBox;
     }
 }

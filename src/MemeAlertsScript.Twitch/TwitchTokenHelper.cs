@@ -2,15 +2,15 @@
 
 namespace MemeAlertsScript.Twitch
 {
-    public class TwitchApiHelper
+    public class TwitchTokenHelper
     {
-        public static async Task<string?> GetAppTokenAsync(string appId, string appSecret)
+        public static async Task<string?> GetAppTokenAsync(string clientId, string clientSecret)
         {
             using var http = new HttpClient();
             var response = await http.PostAsync(
                 $"https://id.twitch.tv/oauth2/token" +
-                $"?client_id={appId}" +
-                $"&client_secret={appSecret}" +
+                $"?client_id={clientId}" +
+                $"&client_secret={clientSecret}" +
                 $"&grant_type=client_credentials",
                 null);
 

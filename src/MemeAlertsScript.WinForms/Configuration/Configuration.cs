@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using MemeAlertsScript.Core.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace MemeAlertsScript.WinForms.Configs
 {
@@ -19,15 +20,6 @@ namespace MemeAlertsScript.WinForms.Configs
         {
             var config = Load();
             return config.GetSection("Twitch").Get<TwitchSettings>()!;
-        }
-
-        public class TwitchSettings
-        {
-            public string AppId { get; set; } = string.Empty;
-            public string AppSecret { get; set; } = string.Empty;
-            public string BroadcasterName { get; set; } = string.Empty;
-            public string RedirectUri { get; set; } = string.Empty;
-            public string[] Scopes { get; set; } = Array.Empty<string>();
         }
     }
 }
