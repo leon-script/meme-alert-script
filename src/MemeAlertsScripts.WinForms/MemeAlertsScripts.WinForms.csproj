@@ -8,4 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MemeAlertsScripts.Twitch\MemeAlertsScripts.Twitch.csproj" />
+  </ItemGroup>
+
 </Project>
