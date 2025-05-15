@@ -1,40 +1,38 @@
 ﻿using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
+using TwitchLib.Api;
 
 namespace MemeAlertsScript.Twitch
 {
-    public class AuthApi
+    public class TwitchApiWrapper
     {
-        public static async Task<string?> GetAppAccessTokenAsync(string clientId, string clientSecret)
+        private readonly TwitchAPI _api;
+        private readonly string _appId;
+        private readonly string _appSecret;
+        private readonly string _redirectUri;
+        private readonly string[] _scopes;
+
+        public TwitchApiWrapper(string appId, string appSecret, string appToken, string redirectUri, string[] scopes)
         {
-            using var http = new HttpClient();
-            var response = await http.PostAsync(
-                $"https://id.twitch.tv/oauth2/token" +
-                $"?client_id={clientId}" +
-                $"&client_secret={clientSecret}" +
-                $"&grant_type=client_credentials",
-                null);
+            _api = new TwitchAPI();
+            _api.Settings.ClientId = appId;
+            _api.Settings.AccessToken = appToken;
 
-            var json = await response.Content.ReadAsStringAsync();
-            var document = JsonDocument.Parse(json);
-
-            if (document.RootElement.TryGetProperty("access_token", out JsonElement accessTokenElement))
-            {
-                return accessTokenElement.GetString();
-            }
-
-            return null;
+            _appId = appId;
+            _appSecret = appSecret;
+            _redirectUri = redirectUri;
+            _scopes = scopes;
         }
 
-        public static async Task<string?> GetOAuthAccessTokenAsync(string clientId, string clientSecret, string redirectUri, string[] scopes)
+        public async Task<string?> GetOAuthTokenAsync()
         {
             string state = Guid.NewGuid().ToString("N");
-            string scopeString = string.Join("+", scopes);
+            string scopeString = string.Join("+", _scopes);
 
             string authUrl = $"https://id.twitch.tv/oauth2/authorize" +
-                             $"?client_id={clientId}" +
-                             $"&redirect_uri={redirectUri}" +
+                             $"?client_id={_appId}" +
+                             $"&redirect_uri={_redirectUri}" +
                              $"&response_type=code" +
                              $"&scope={scopeString}" +
                              $"&state={state}";
@@ -42,14 +40,14 @@ namespace MemeAlertsScript.Twitch
             Process.Start(new ProcessStartInfo(authUrl) { UseShellExecute = true });
 
             var listener = new HttpListener();
-            listener.Prefixes.Add(redirectUri);
+            listener.Prefixes.Add(_redirectUri);
             listener.Start();
 
             var context = await listener.GetContextAsync();
             string code = context.Request.QueryString["code"];
             string receivedState = context.Request.QueryString["state"];
 
-            var responseString = "<html><body>✅ Авторизация прошла. Можешь закрыть окно.</body></html>";
+            var responseString = "<html><body>Done. You can close this window.</body></html>";
             var buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             context.Response.ContentLength64 = buffer.Length;
             await context.Response.OutputStream.WriteAsync(buffer);
@@ -61,22 +59,28 @@ namespace MemeAlertsScript.Twitch
                 throw new Exception("Invalid authorization");
             }
 
-            // Обмениваем code на access_token
             using var client = new HttpClient();
             var tokenResponse = await client.PostAsync("https://id.twitch.tv/oauth2/token", new FormUrlEncodedContent(new Dictionary<string, string>
             {
-                { "client_id", clientId },
-                { "client_secret", clientSecret },
+                { "client_id", _appId },
+                { "client_secret", _appSecret },
                 { "code", code },
                 { "grant_type", "authorization_code" },
-                { "redirect_uri", redirectUri }
+                { "redirect_uri", _redirectUri }
             }));
 
             var json = await tokenResponse.Content.ReadAsStringAsync();
-            var doc = JsonDocument.Parse(json);
-            string accessToken = doc.RootElement.GetProperty("access_token").GetString();
+            var document = JsonDocument.Parse(json);
+            string accessToken = document.RootElement.GetProperty("access_token").GetString();
 
             return accessToken;
         }
+
+        public async Task<string?> GetUserIdByLoginAsync(string login)
+        {
+            var users = await _api.Helix.Users.GetUsersAsync(logins: new List<string> { login });
+            return users.Users.FirstOrDefault()?.Id;
+        }
+
     }
 }

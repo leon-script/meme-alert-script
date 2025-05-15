@@ -1,4 +1,5 @@
 ﻿using MemeAlertsScript.Twitch;
+using MemeAlertsScript.WinForms.Configs;
 
 namespace MemeAlertsScript.WinForms
 {
@@ -13,25 +14,15 @@ namespace MemeAlertsScript.WinForms
 
         private async void MainForm_LoadAsync(object sender, EventArgs e)
         {
-            var clientId = ""; // TODO
-            var clientSecret = ""; // TODO
-            var userId = ""; // TODO
-            var redirectUri = "http://localhost:54321/";
-            var scopes = new[] { "channel:read:redemptions", "moderator:read:chat_settings" };
+            var config = Configuration.LoadTwitchSettings();
 
-            var accessToken = await AuthApi.GetAppAccessTokenAsync(clientId, clientSecret)
-                ?? throw new ArgumentNullException();
+            var appToken = await TwitchApiHelper.GetAppTokenAsync(config.AppId, config.AppSecret) ?? throw new ArgumentNullException();
+            var api = new TwitchApiWrapper(config.AppId, config.AppSecret, appToken, config.RedirectUri, config.Scopes);
 
-            var userToken = await AuthApi.GetOAuthAccessTokenAsync(clientId, clientSecret, redirectUri, scopes)
-                ?? throw new ArgumentNullException();
+            var broadcasterId = await api.GetUserIdByLoginAsync(config.BroadcasterName) ?? throw new ArgumentNullException(config.BroadcasterName);
+            var oauthToken = await api.GetOAuthTokenAsync() ?? throw new ArgumentNullException();
 
-            _eventSub = new EventSubListener(
-                clientId: clientId,
-                accessToken: accessToken,
-                userId: userId,
-                userToken: userToken
-            );
-
+            _eventSub = new EventSubListener(config.AppId, appToken, broadcasterId, oauthToken);
             _eventSub.OnRewardRedeemed += OnRewardRedeemed;
 
             await _eventSub.StartAsync(CancellationToken.None);

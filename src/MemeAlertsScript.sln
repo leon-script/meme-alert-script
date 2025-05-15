@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemeAlertsScript.WinForms",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemeAlertsScript.Twitch", "MemeAlertsScript.Twitch\MemeAlertsScript.Twitch.csproj", "{7CD90F20-E74D-46BB-A3FC-EF4BD51C442B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemeAlertsScript.Core", "MemeAlertsScript.Core\MemeAlertsScript.Core.csproj", "{FAC430CC-47CB-4F45-94E8-B8DF8D23C91F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7CD90F20-E74D-46BB-A3FC-EF4BD51C442B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CD90F20-E74D-46BB-A3FC-EF4BD51C442B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CD90F20-E74D-46BB-A3FC-EF4BD51C442B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAC430CC-47CB-4F45-94E8-B8DF8D23C91F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAC430CC-47CB-4F45-94E8-B8DF8D23C91F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAC430CC-47CB-4F45-94E8-B8DF8D23C91F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC430CC-47CB-4F45-94E8-B8DF8D23C91F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

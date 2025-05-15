@@ -10,12 +10,12 @@ namespace MemeAlertsScript.Twitch
     {
         private readonly EventSubWebsocketClient _eventSubWebsocketClient;
         private readonly TwitchAPI _twitchApi;
-        private readonly string _userId;
-        private readonly string _userToken;
+        private readonly string _broadcasterId;
+        private readonly string _oauthToken;
 
         public event Action<string, string> OnRewardRedeemed;
 
-        public EventSubListener(string clientId, string accessToken, string userId, string userToken)
+        public EventSubListener(string appId, string appToken, string broadcasterId, string oauthToken)
         {
             _eventSubWebsocketClient = new EventSubWebsocketClient();
             _eventSubWebsocketClient.WebsocketConnected += OnWebsocketConnected;
@@ -25,15 +25,11 @@ namespace MemeAlertsScript.Twitch
             _eventSubWebsocketClient.ChannelPointsCustomRewardRedemptionAdd += OnRedemption;
 
             _twitchApi = new TwitchAPI();
-            // Get ClientId and ClientSecret by register an Application here: https://dev.twitch.tv/console/apps
-            // https://dev.twitch.tv/docs/authentication/register-app/
-            _twitchApi.Settings.ClientId = clientId;
-            // Get Application Token with Client credentials grant flow.
-            // https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#client-credentials-grant-flow
-            _twitchApi.Settings.AccessToken = accessToken;
-            
-            _userId = userId;
-            _userToken = userToken;
+            _twitchApi.Settings.ClientId = appId;
+            _twitchApi.Settings.AccessToken = appToken;
+
+            _broadcasterId = broadcasterId;
+            _oauthToken = oauthToken;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -55,10 +51,10 @@ namespace MemeAlertsScript.Twitch
                 // subscribe to topics
                 // create condition Dictionary
                 // You need BOTH broadcaster and moderator values or EventSub returns an Error!
-                var condition = new Dictionary<string, string> { { "broadcaster_user_id", _userId }, { "moderator_user_id", _userId } };
+                var condition = new Dictionary<string, string> { { "broadcaster_user_id", _broadcasterId }, { "moderator_user_id", _broadcasterId } };
                 // Create and send EventSubscription
                 await _twitchApi.Helix.EventSub.CreateEventSubSubscriptionAsync("channel.channel_points_custom_reward_redemption.add", "1", condition, EventSubTransportMethod.Websocket,
-                _eventSubWebsocketClient.SessionId, accessToken: _userToken); // "BROADCASTER_ACCESS_TOKEN_WITH_SCOPES");
+                _eventSubWebsocketClient.SessionId, accessToken: _oauthToken); // "BROADCASTER_ACCESS_TOKEN_WITH_SCOPES");
                 // If you want to get Events for special Events you need to additionally add the AccessToken of the ChannelOwner to the request.
                 // https://dev.twitch.tv/docs/eventsub/eventsub-subscription-types/
             }
@@ -78,14 +74,14 @@ namespace MemeAlertsScript.Twitch
 
         private Task OnWebsocketReconnected(object sender, EventArgs e)
         {
-            return Task.CompletedTask;
             // _logger.LogWarning($"Websocket {_eventSubWebsocketClient.SessionId} reconnected");
+            return Task.CompletedTask;
         }
 
         private Task OnErrorOccurred(object sender, ErrorOccuredArgs e)
         {
-            return Task.CompletedTask;
             // _logger.LogError($"Websocket {_eventSubWebsocketClient.SessionId} - Error occurred!");
+            return Task.CompletedTask;
         }
 
         private Task OnRedemption(object sender, ChannelPointsCustomRewardRedemptionArgs e)
