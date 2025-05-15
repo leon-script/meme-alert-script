@@ -1,6 +1,6 @@
-﻿using MemeAlertsScripts.Twitch;
+﻿using MemeAlertsScript.Twitch;
 
-namespace MemeAlertsScripts.WinForms
+namespace MemeAlertsScript.WinForms
 {
     public partial class MainForm : Form
     {

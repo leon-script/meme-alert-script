@@ -4,7 +4,7 @@ using TwitchLib.EventSub.Websockets;
 using TwitchLib.EventSub.Websockets.Core.EventArgs;
 using TwitchLib.EventSub.Websockets.Core.EventArgs.Channel;
 
-namespace MemeAlertsScripts.Twitch
+namespace MemeAlertsScript.Twitch
 {
     public class EventSubListener
     {

@@ -1,6 +1,6 @@
 ﻿
 
-namespace MemeAlertsScripts.WinForms
+namespace MemeAlertsScript.WinForms
 {
     partial class MainForm
     {

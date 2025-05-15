@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.Json;
 
-namespace MemeAlertsScripts.Twitch
+namespace MemeAlertsScript.Twitch
 {
     public class AuthApi
     {

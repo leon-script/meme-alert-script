@@ -1,4 +1,4 @@
-namespace MemeAlertsScripts.WinForms
+namespace MemeAlertsScript.WinForms
 {
     internal static class Program
     {

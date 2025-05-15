@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MemeAlertsScripts.Twitch\MemeAlertsScripts.Twitch.csproj" />
+    <ProjectReference Include="..\MemeAlertsScript.Twitch\MemeAlertsScript.Twitch.csproj" />
   </ItemGroup>
 
 </Project>
