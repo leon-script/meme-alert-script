@@ -13,7 +13,7 @@ namespace MemeAlertsScript.WinForms
 
         private void CreateRewardForm_Load(object sender, EventArgs e)
         {
-            nameTextBox.Text = "Buy 10 MemeAlerts Points";
+            titleTextBox.Text = "Buy 10 MemeAlerts Points";
             promptRichTextBox.Text = "Exchange your Twitch Channel Points for MemeAlerts points. You must have already sent points to MemeAlerts. Enter your MemeAlerts username below.";
             twitchCostNumericUpDown.Value = 1000;
             memeCostNumericUpDown.Value = 10;
@@ -23,8 +23,8 @@ namespace MemeAlertsScript.WinForms
         {
             RewardResult = new CreateMemeReward
             {
-                Name = nameTextBox.Text,
-                Prompt = $"[{(int)memeCostNumericUpDown.Value}] {promptRichTextBox.Text}",
+                Title = titleTextBox.Text,
+                Prompt = $"{promptRichTextBox.Text}\n[{(int)memeCostNumericUpDown.Value}]",
                 TwitchCost = (int)twitchCostNumericUpDown.Value,
                 MemeCost = (int)memeCostNumericUpDown.Value,
             };

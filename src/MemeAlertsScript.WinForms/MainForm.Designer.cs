@@ -30,214 +30,227 @@ namespace MemeAlertsScript.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            groupBoxLogin = new GroupBox();
-            buttonTwitchLogout = new Button();
-            buttonTwitchLogin = new Button();
-            textBoxTwitchLogin = new TextBox();
-            groupBoxRewards = new GroupBox();
-            dataGridViewRewards = new DataGridView();
-            panelRewards = new Panel();
-            buttonRefreshRewards = new Button();
-            buttonCreateReward = new Button();
-            groupBoxActions = new GroupBox();
+            loginGroupBox = new GroupBox();
+            twitchLogoutButton = new Button();
+            twitchLoginButton = new Button();
+            twitchLoginTextBox = new TextBox();
+            rewardsGroupBox = new GroupBox();
+            rewardsDataGridView = new DataGridView();
+            idColumn = new DataGridViewTextBoxColumn();
+            deleteColumn = new DataGridViewButtonColumn();
+            titleColumn = new DataGridViewTextBoxColumn();
+            twitchCostColumn = new DataGridViewTextBoxColumn();
+            memeCostColumn = new DataGridViewTextBoxColumn();
+            promptColumn = new DataGridViewTextBoxColumn();
+            rewardsPanel = new Panel();
+            refreshRewardsButton = new Button();
+            createRewardButton = new Button();
+            logsGroupBox = new GroupBox();
             logsRichTextBox = new RichTextBox();
-            ColumnDelete = new DataGridViewButtonColumn();
-            ColumnName = new DataGridViewTextBoxColumn();
-            ColumnCost = new DataGridViewTextBoxColumn();
-            ColumnPrompt = new DataGridViewTextBoxColumn();
-            ColumnId = new DataGridViewTextBoxColumn();
-            groupBoxLogin.SuspendLayout();
-            groupBoxRewards.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridViewRewards).BeginInit();
-            panelRewards.SuspendLayout();
-            groupBoxActions.SuspendLayout();
+            loginGroupBox.SuspendLayout();
+            rewardsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)rewardsDataGridView).BeginInit();
+            rewardsPanel.SuspendLayout();
+            logsGroupBox.SuspendLayout();
             SuspendLayout();
             // 
-            // groupBoxLogin
+            // loginGroupBox
             // 
-            groupBoxLogin.Controls.Add(buttonTwitchLogout);
-            groupBoxLogin.Controls.Add(buttonTwitchLogin);
-            groupBoxLogin.Controls.Add(textBoxTwitchLogin);
-            groupBoxLogin.Dock = DockStyle.Top;
-            groupBoxLogin.Location = new Point(0, 0);
-            groupBoxLogin.Name = "groupBoxLogin";
-            groupBoxLogin.Size = new Size(692, 59);
-            groupBoxLogin.TabIndex = 0;
-            groupBoxLogin.TabStop = false;
-            groupBoxLogin.Text = "OAuth";
+            loginGroupBox.Controls.Add(twitchLogoutButton);
+            loginGroupBox.Controls.Add(twitchLoginButton);
+            loginGroupBox.Controls.Add(twitchLoginTextBox);
+            loginGroupBox.Dock = DockStyle.Top;
+            loginGroupBox.Location = new Point(0, 0);
+            loginGroupBox.Name = "loginGroupBox";
+            loginGroupBox.Size = new Size(694, 59);
+            loginGroupBox.TabIndex = 0;
+            loginGroupBox.TabStop = false;
+            loginGroupBox.Text = "OAuth";
             // 
-            // buttonTwitchLogout
+            // twitchLogoutButton
             // 
-            buttonTwitchLogout.Enabled = false;
-            buttonTwitchLogout.Location = new Point(121, 22);
-            buttonTwitchLogout.Name = "buttonTwitchLogout";
-            buttonTwitchLogout.Size = new Size(75, 23);
-            buttonTwitchLogout.TabIndex = 0;
-            buttonTwitchLogout.Text = "Logout";
-            buttonTwitchLogout.UseVisualStyleBackColor = true;
-            buttonTwitchLogout.Click += buttonTwitchLogout_Click;
+            twitchLogoutButton.Enabled = false;
+            twitchLogoutButton.Location = new Point(121, 22);
+            twitchLogoutButton.Name = "twitchLogoutButton";
+            twitchLogoutButton.Size = new Size(75, 23);
+            twitchLogoutButton.TabIndex = 0;
+            twitchLogoutButton.Text = "Logout";
+            twitchLogoutButton.UseVisualStyleBackColor = true;
+            twitchLogoutButton.Click += buttonTwitchLogout_Click;
             // 
-            // buttonTwitchLogin
+            // twitchLoginButton
             // 
-            buttonTwitchLogin.Location = new Point(12, 22);
-            buttonTwitchLogin.Name = "buttonTwitchLogin";
-            buttonTwitchLogin.Size = new Size(103, 23);
-            buttonTwitchLogin.TabIndex = 0;
-            buttonTwitchLogin.Text = "Login Twitch";
-            buttonTwitchLogin.UseVisualStyleBackColor = true;
-            buttonTwitchLogin.Click += buttonTwitchLogin_Click;
+            twitchLoginButton.Location = new Point(12, 22);
+            twitchLoginButton.Name = "twitchLoginButton";
+            twitchLoginButton.Size = new Size(103, 23);
+            twitchLoginButton.TabIndex = 0;
+            twitchLoginButton.Text = "Login Twitch";
+            twitchLoginButton.UseVisualStyleBackColor = true;
+            twitchLoginButton.Click += buttonTwitchLogin_Click;
             // 
-            // textBoxTwitchLogin
+            // twitchLoginTextBox
             // 
-            textBoxTwitchLogin.Location = new Point(204, 22);
-            textBoxTwitchLogin.Name = "textBoxTwitchLogin";
-            textBoxTwitchLogin.ReadOnly = true;
-            textBoxTwitchLogin.Size = new Size(254, 23);
-            textBoxTwitchLogin.TabIndex = 3;
+            twitchLoginTextBox.Location = new Point(204, 22);
+            twitchLoginTextBox.Name = "twitchLoginTextBox";
+            twitchLoginTextBox.ReadOnly = true;
+            twitchLoginTextBox.Size = new Size(254, 23);
+            twitchLoginTextBox.TabIndex = 3;
             // 
-            // groupBoxRewards
+            // rewardsGroupBox
             // 
-            groupBoxRewards.Controls.Add(dataGridViewRewards);
-            groupBoxRewards.Controls.Add(panelRewards);
-            groupBoxRewards.Dock = DockStyle.Top;
-            groupBoxRewards.Location = new Point(0, 59);
-            groupBoxRewards.Name = "groupBoxRewards";
-            groupBoxRewards.Size = new Size(692, 127);
-            groupBoxRewards.TabIndex = 2;
-            groupBoxRewards.TabStop = false;
-            groupBoxRewards.Text = "Rewards";
+            rewardsGroupBox.Controls.Add(rewardsDataGridView);
+            rewardsGroupBox.Controls.Add(rewardsPanel);
+            rewardsGroupBox.Dock = DockStyle.Top;
+            rewardsGroupBox.Location = new Point(0, 59);
+            rewardsGroupBox.Name = "rewardsGroupBox";
+            rewardsGroupBox.Size = new Size(694, 127);
+            rewardsGroupBox.TabIndex = 2;
+            rewardsGroupBox.TabStop = false;
+            rewardsGroupBox.Text = "Rewards";
             // 
-            // dataGridViewRewards
+            // rewardsDataGridView
             // 
-            dataGridViewRewards.AllowUserToAddRows = false;
-            dataGridViewRewards.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewRewards.Columns.AddRange(new DataGridViewColumn[] { ColumnDelete, ColumnName, ColumnCost, ColumnPrompt, ColumnId });
-            dataGridViewRewards.Dock = DockStyle.Fill;
-            dataGridViewRewards.Location = new Point(168, 19);
-            dataGridViewRewards.Name = "dataGridViewRewards";
-            dataGridViewRewards.ReadOnly = true;
-            dataGridViewRewards.Size = new Size(521, 105);
-            dataGridViewRewards.TabIndex = 1;
-            dataGridViewRewards.CellContentClick += dataGridViewRewards_CellContentClick;
+            rewardsDataGridView.AllowUserToAddRows = false;
+            rewardsDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            rewardsDataGridView.Columns.AddRange(new DataGridViewColumn[] { idColumn, deleteColumn, titleColumn, twitchCostColumn, memeCostColumn, promptColumn });
+            rewardsDataGridView.Dock = DockStyle.Fill;
+            rewardsDataGridView.Location = new Point(168, 19);
+            rewardsDataGridView.Name = "rewardsDataGridView";
+            rewardsDataGridView.ReadOnly = true;
+            rewardsDataGridView.Size = new Size(523, 105);
+            rewardsDataGridView.TabIndex = 1;
+            rewardsDataGridView.CellContentClick += dataGridViewRewards_CellContentClick;
             // 
-            // panelRewards
+            // idColumn
             // 
-            panelRewards.Controls.Add(buttonRefreshRewards);
-            panelRewards.Controls.Add(buttonCreateReward);
-            panelRewards.Dock = DockStyle.Left;
-            panelRewards.Location = new Point(3, 19);
-            panelRewards.Name = "panelRewards";
-            panelRewards.Size = new Size(165, 105);
-            panelRewards.TabIndex = 0;
+            idColumn.HeaderText = "Id";
+            idColumn.Name = "idColumn";
+            idColumn.ReadOnly = true;
+            idColumn.Visible = false;
             // 
-            // buttonRefreshRewards
+            // deleteColumn
             // 
-            buttonRefreshRewards.Location = new Point(7, 55);
-            buttonRefreshRewards.Name = "buttonRefreshRewards";
-            buttonRefreshRewards.Size = new Size(150, 34);
-            buttonRefreshRewards.TabIndex = 1;
-            buttonRefreshRewards.Text = "Refresh list";
-            buttonRefreshRewards.UseVisualStyleBackColor = true;
-            buttonRefreshRewards.Click += buttonRefreshRewards_Click;
+            deleteColumn.HeaderText = "";
+            deleteColumn.Name = "deleteColumn";
+            deleteColumn.ReadOnly = true;
+            deleteColumn.Width = 60;
             // 
-            // buttonCreateReward
+            // titleColumn
             // 
-            buttonCreateReward.Location = new Point(7, 14);
-            buttonCreateReward.Name = "buttonCreateReward";
-            buttonCreateReward.Size = new Size(150, 34);
-            buttonCreateReward.TabIndex = 0;
-            buttonCreateReward.Text = "Create meme reward";
-            buttonCreateReward.UseVisualStyleBackColor = true;
-            buttonCreateReward.Click += buttonCreateReward_Click;
+            titleColumn.HeaderText = "Title";
+            titleColumn.Name = "titleColumn";
+            titleColumn.ReadOnly = true;
+            titleColumn.Width = 150;
             // 
-            // groupBoxActions
+            // twitchCostColumn
             // 
-            groupBoxActions.Controls.Add(logsRichTextBox);
-            groupBoxActions.Dock = DockStyle.Fill;
-            groupBoxActions.Location = new Point(0, 186);
-            groupBoxActions.Name = "groupBoxActions";
-            groupBoxActions.Size = new Size(692, 554);
-            groupBoxActions.TabIndex = 3;
-            groupBoxActions.TabStop = false;
-            groupBoxActions.Text = "Actions";
+            twitchCostColumn.HeaderText = "Twitch Cost";
+            twitchCostColumn.Name = "twitchCostColumn";
+            twitchCostColumn.ReadOnly = true;
+            // 
+            // memeCostColumn
+            // 
+            memeCostColumn.HeaderText = "Meme cost";
+            memeCostColumn.Name = "memeCostColumn";
+            memeCostColumn.ReadOnly = true;
+            // 
+            // promptColumn
+            // 
+            promptColumn.HeaderText = "Prompt";
+            promptColumn.Name = "promptColumn";
+            promptColumn.ReadOnly = true;
+            promptColumn.Width = 250;
+            // 
+            // rewardsPanel
+            // 
+            rewardsPanel.Controls.Add(refreshRewardsButton);
+            rewardsPanel.Controls.Add(createRewardButton);
+            rewardsPanel.Dock = DockStyle.Left;
+            rewardsPanel.Location = new Point(3, 19);
+            rewardsPanel.Name = "rewardsPanel";
+            rewardsPanel.Size = new Size(165, 105);
+            rewardsPanel.TabIndex = 0;
+            // 
+            // refreshRewardsButton
+            // 
+            refreshRewardsButton.Location = new Point(7, 55);
+            refreshRewardsButton.Name = "refreshRewardsButton";
+            refreshRewardsButton.Size = new Size(150, 34);
+            refreshRewardsButton.TabIndex = 1;
+            refreshRewardsButton.Text = "Refresh list";
+            refreshRewardsButton.UseVisualStyleBackColor = true;
+            refreshRewardsButton.Click += buttonRefreshRewards_Click;
+            // 
+            // createRewardButton
+            // 
+            createRewardButton.Location = new Point(7, 14);
+            createRewardButton.Name = "createRewardButton";
+            createRewardButton.Size = new Size(150, 34);
+            createRewardButton.TabIndex = 0;
+            createRewardButton.Text = "Create meme reward";
+            createRewardButton.UseVisualStyleBackColor = true;
+            createRewardButton.Click += buttonCreateReward_Click;
+            // 
+            // logsGroupBox
+            // 
+            logsGroupBox.Controls.Add(logsRichTextBox);
+            logsGroupBox.Dock = DockStyle.Fill;
+            logsGroupBox.Location = new Point(0, 186);
+            logsGroupBox.Name = "logsGroupBox";
+            logsGroupBox.Size = new Size(694, 554);
+            logsGroupBox.TabIndex = 3;
+            logsGroupBox.TabStop = false;
+            logsGroupBox.Text = "Logs";
             // 
             // logsRichTextBox
             // 
-            logsRichTextBox.Location = new Point(12, 22);
+            logsRichTextBox.Dock = DockStyle.Fill;
+            logsRichTextBox.Location = new Point(3, 19);
             logsRichTextBox.Name = "logsRichTextBox";
             logsRichTextBox.ReadOnly = true;
-            logsRichTextBox.Size = new Size(674, 358);
+            logsRichTextBox.Size = new Size(688, 532);
             logsRichTextBox.TabIndex = 0;
             logsRichTextBox.Text = "";
-            // 
-            // ColumnDelete
-            // 
-            ColumnDelete.HeaderText = "Delete";
-            ColumnDelete.Name = "ColumnDelete";
-            ColumnDelete.ReadOnly = true;
-            // 
-            // ColumnName
-            // 
-            ColumnName.HeaderText = "Name";
-            ColumnName.Name = "ColumnName";
-            ColumnName.ReadOnly = true;
-            // 
-            // ColumnCost
-            // 
-            ColumnCost.HeaderText = "Cost";
-            ColumnCost.Name = "ColumnCost";
-            ColumnCost.ReadOnly = true;
-            // 
-            // ColumnPrompt
-            // 
-            ColumnPrompt.HeaderText = "Prompt";
-            ColumnPrompt.Name = "ColumnPrompt";
-            ColumnPrompt.ReadOnly = true;
-            // 
-            // ColumnId
-            // 
-            ColumnId.HeaderText = "Id";
-            ColumnId.Name = "ColumnId";
-            ColumnId.ReadOnly = true;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(692, 740);
-            Controls.Add(groupBoxActions);
-            Controls.Add(groupBoxRewards);
-            Controls.Add(groupBoxLogin);
+            ClientSize = new Size(694, 740);
+            Controls.Add(logsGroupBox);
+            Controls.Add(rewardsGroupBox);
+            Controls.Add(loginGroupBox);
             Name = "MainForm";
             Text = "meme-alerts-scripts poc-1";
             FormClosing += MainForm_FormClosing;
             Load += MainForm_LoadAsync;
-            groupBoxLogin.ResumeLayout(false);
-            groupBoxLogin.PerformLayout();
-            groupBoxRewards.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridViewRewards).EndInit();
-            panelRewards.ResumeLayout(false);
-            groupBoxActions.ResumeLayout(false);
+            loginGroupBox.ResumeLayout(false);
+            loginGroupBox.PerformLayout();
+            rewardsGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)rewardsDataGridView).EndInit();
+            rewardsPanel.ResumeLayout(false);
+            logsGroupBox.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private GroupBox groupBoxLogin;
-        private GroupBox groupBoxRewards;
-        private GroupBox groupBoxActions;
-        private Button buttonTwitchLogout;
-        private Button buttonTwitchLogin;
-        private TextBox textBoxTwitchLogin;
+        private GroupBox loginGroupBox;
+        private GroupBox rewardsGroupBox;
+        private GroupBox logsGroupBox;
+        private Button twitchLogoutButton;
+        private Button twitchLoginButton;
+        private TextBox twitchLoginTextBox;
         private RichTextBox logsRichTextBox;
-        private DataGridView dataGridViewRewards;
-        private Panel panelRewards;
-        private Button buttonCreateReward;
-        private Button buttonRefreshRewards;
-        private DataGridViewButtonColumn ColumnDelete;
-        private DataGridViewTextBoxColumn ColumnName;
-        private DataGridViewTextBoxColumn ColumnCost;
-        private DataGridViewTextBoxColumn ColumnPrompt;
-        private DataGridViewTextBoxColumn ColumnId;
+        private DataGridView rewardsDataGridView;
+        private Panel rewardsPanel;
+        private Button createRewardButton;
+        private Button refreshRewardsButton;
+        private DataGridViewTextBoxColumn idColumn;
+        private DataGridViewButtonColumn deleteColumn;
+        private DataGridViewTextBoxColumn titleColumn;
+        private DataGridViewTextBoxColumn twitchCostColumn;
+        private DataGridViewTextBoxColumn memeCostColumn;
+        private DataGridViewTextBoxColumn promptColumn;
     }
 }

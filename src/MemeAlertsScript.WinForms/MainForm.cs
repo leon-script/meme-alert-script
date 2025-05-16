@@ -2,6 +2,7 @@
 using MemeAlertsScript.Core.Models;
 using MemeAlertsScript.Twitch;
 using MemeAlertsScript.WinForms.Configs;
+using MemeAlertsScript.WinForms.Extensions;
 using MemeAlertsScript.WinForms.Logging;
 using Microsoft.Extensions.Logging;
 using TwitchLib.Api.Core.Enums;
@@ -80,9 +81,9 @@ namespace MemeAlertsScript.WinForms
                 {
                     _authTokens = oauthForm.AuthTokensResult;
                     _broadcaster = oauthForm.BroadcasterResult;
-                    textBoxTwitchLogin.Text = $"{_broadcaster!.Login} (ID: {_broadcaster.Id})";
-                    buttonTwitchLogin.Enabled = false;
-                    buttonTwitchLogout.Enabled = true;
+                    twitchLoginTextBox.Text = $"{_broadcaster!.Login} (ID: {_broadcaster.Id})";
+                    twitchLoginButton.Enabled = false;
+                    twitchLogoutButton.Enabled = true;
 
                     _logger.LogInformation("Twitch OAuth login successful.");
                     _logger.LogInformation("Logged in as: {Login} (ID: {Id})", _broadcaster.Login, _broadcaster.Id);
@@ -120,9 +121,9 @@ namespace MemeAlertsScript.WinForms
 
                     _authTokens = null;
                     _broadcaster = null;
-                    textBoxTwitchLogin.Text = string.Empty;
-                    buttonTwitchLogin.Enabled = true;
-                    buttonTwitchLogout.Enabled = false;
+                    twitchLoginTextBox.Text = string.Empty;
+                    twitchLoginButton.Enabled = true;
+                    twitchLogoutButton.Enabled = false;
                     CleanRewards();
 
                     if (_eventSub != null)
@@ -138,9 +139,9 @@ namespace MemeAlertsScript.WinForms
             {
                 _authTokens = null;
                 _broadcaster = null;
-                textBoxTwitchLogin.Text = string.Empty;
-                buttonTwitchLogin.Enabled = true;
-                buttonTwitchLogout.Enabled = false;
+                twitchLoginTextBox.Text = string.Empty;
+                twitchLoginButton.Enabled = true;
+                twitchLogoutButton.Enabled = false;
                 CleanRewards();
 
                 _logger.LogError(exception, "Exception occurred during authorization.");
@@ -155,9 +156,9 @@ namespace MemeAlertsScript.WinForms
             {
                 _authTokens = null;
                 _broadcaster = null;
-                textBoxTwitchLogin.Text = string.Empty;
-                buttonTwitchLogin.Enabled = true;
-                buttonTwitchLogout.Enabled = false;
+                twitchLoginTextBox.Text = string.Empty;
+                twitchLoginButton.Enabled = true;
+                twitchLogoutButton.Enabled = false;
 
                 if (_eventSub != null)
                 {
@@ -204,7 +205,7 @@ namespace MemeAlertsScript.WinForms
             if (dialogResult == DialogResult.OK)
             {
                 await _rewardApi.CreateCustomRewardAsync(
-                    createRewardForm.RewardResult?.Name!,
+                    createRewardForm.RewardResult?.Title!,
                     createRewardForm.RewardResult!.TwitchCost,
                     createRewardForm.RewardResult?.Prompt!,
                     true,
@@ -217,7 +218,7 @@ namespace MemeAlertsScript.WinForms
 
         private void CleanRewards()
         {
-            dataGridViewRewards.Rows.Clear();
+            rewardsDataGridView.Rows.Clear();
         }
 
         private async void RefreshRewards()
@@ -228,14 +229,15 @@ namespace MemeAlertsScript.WinForms
             {
                 foreach (var reward in rewards)
                 {
-                    dataGridViewRewards.Rows.Add(
+                    rewardsDataGridView.Rows.Add(
                         new object[]
                         {
+                            reward.Id,
                             "Delete",
                             reward.Title,
                             reward.Cost,
-                            reward.Prompt,
-                            reward.Id
+                            reward.Prompt.ParseTrailingBracketNumber()!,
+                            reward.Prompt
                         });
                 }
             }
@@ -247,10 +249,10 @@ namespace MemeAlertsScript.WinForms
 
         private async void dataGridViewRewards_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex == 0)
+            if (e.RowIndex >= 0 && e.ColumnIndex == 1)
             {
                 var grid = sender as DataGridView;
-                var rewardId = grid?.Rows[e.RowIndex].Cells[4].Value?.ToString();
+                var rewardId = grid?.Rows[e.RowIndex].Cells[0].Value?.ToString();
 
                 if (!string.IsNullOrEmpty(rewardId))
                 {

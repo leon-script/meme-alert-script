@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            nameTextBox = new TextBox();
-            nameLabel = new Label();
+            titleTextBox = new TextBox();
+            titleLabel = new Label();
             promptLabel = new Label();
             promptRichTextBox = new RichTextBox();
             twitchCostLabel = new Label();
@@ -41,21 +41,21 @@
             ((System.ComponentModel.ISupportInitialize)memeCostNumericUpDown).BeginInit();
             SuspendLayout();
             // 
-            // nameTextBox
+            // titleTextBox
             // 
-            nameTextBox.Location = new Point(12, 31);
-            nameTextBox.Name = "nameTextBox";
-            nameTextBox.Size = new Size(432, 23);
-            nameTextBox.TabIndex = 0;
+            titleTextBox.Location = new Point(12, 31);
+            titleTextBox.Name = "titleTextBox";
+            titleTextBox.Size = new Size(432, 23);
+            titleTextBox.TabIndex = 0;
             // 
-            // nameLabel
+            // titleLabel
             // 
-            nameLabel.AutoSize = true;
-            nameLabel.Location = new Point(12, 11);
-            nameLabel.Name = "nameLabel";
-            nameLabel.Size = new Size(39, 15);
-            nameLabel.TabIndex = 1;
-            nameLabel.Text = "Name";
+            titleLabel.AutoSize = true;
+            titleLabel.Location = new Point(12, 11);
+            titleLabel.Name = "titleLabel";
+            titleLabel.Size = new Size(30, 15);
+            titleLabel.TabIndex = 1;
+            titleLabel.Text = "Title";
             // 
             // promptLabel
             // 
@@ -135,8 +135,8 @@
             Controls.Add(twitchCostLabel);
             Controls.Add(promptRichTextBox);
             Controls.Add(promptLabel);
-            Controls.Add(nameLabel);
-            Controls.Add(nameTextBox);
+            Controls.Add(titleLabel);
+            Controls.Add(titleTextBox);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "CreateRewardForm";
@@ -151,8 +151,8 @@
 
         #endregion
 
-        private TextBox nameTextBox;
-        private Label nameLabel;
+        private TextBox titleTextBox;
+        private Label titleLabel;
         private Label promptLabel;
         private RichTextBox promptRichTextBox;
         private Label twitchCostLabel;
