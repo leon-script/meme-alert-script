@@ -47,11 +47,30 @@ namespace MemeAlertsScript.WinForms
             createRewardButton = new Button();
             logsGroupBox = new GroupBox();
             logsRichTextBox = new RichTextBox();
+            memeRedemptionsGroupBox = new GroupBox();
+            redemptionsDataGridView = new DataGridView();
+            rewardIdColumn = new DataGridViewTextBoxColumn();
+            redemptionIdColumn = new DataGridViewTextBoxColumn();
+            resolveButtonColumn = new DataGridViewButtonColumn();
+            declineButtonColumn = new DataGridViewButtonColumn();
+            StatusColumn = new DataGridViewTextBoxColumn();
+            dateColumn = new DataGridViewTextBoxColumn();
+            titleRedemptionColumn = new DataGridViewTextBoxColumn();
+            TwitchUserColumn = new DataGridViewTextBoxColumn();
+            MemeUserColumn = new DataGridViewTextBoxColumn();
+            MemePointsColumn = new DataGridViewTextBoxColumn();
+            redemptionsPanel = new Panel();
+            declineButton = new Button();
+            resolveButton = new Button();
+            autoResolvecheckBox = new CheckBox();
             loginGroupBox.SuspendLayout();
             rewardsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)rewardsDataGridView).BeginInit();
             rewardsPanel.SuspendLayout();
             logsGroupBox.SuspendLayout();
+            memeRedemptionsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)redemptionsDataGridView).BeginInit();
+            redemptionsPanel.SuspendLayout();
             SuspendLayout();
             // 
             // loginGroupBox
@@ -62,7 +81,7 @@ namespace MemeAlertsScript.WinForms
             loginGroupBox.Dock = DockStyle.Top;
             loginGroupBox.Location = new Point(0, 0);
             loginGroupBox.Name = "loginGroupBox";
-            loginGroupBox.Size = new Size(694, 59);
+            loginGroupBox.Size = new Size(975, 59);
             loginGroupBox.TabIndex = 0;
             loginGroupBox.TabStop = false;
             loginGroupBox.Text = "OAuth";
@@ -93,7 +112,7 @@ namespace MemeAlertsScript.WinForms
             twitchLoginTextBox.Location = new Point(204, 22);
             twitchLoginTextBox.Name = "twitchLoginTextBox";
             twitchLoginTextBox.ReadOnly = true;
-            twitchLoginTextBox.Size = new Size(254, 23);
+            twitchLoginTextBox.Size = new Size(415, 23);
             twitchLoginTextBox.TabIndex = 3;
             // 
             // rewardsGroupBox
@@ -103,21 +122,22 @@ namespace MemeAlertsScript.WinForms
             rewardsGroupBox.Dock = DockStyle.Top;
             rewardsGroupBox.Location = new Point(0, 59);
             rewardsGroupBox.Name = "rewardsGroupBox";
-            rewardsGroupBox.Size = new Size(694, 127);
+            rewardsGroupBox.Size = new Size(975, 127);
             rewardsGroupBox.TabIndex = 2;
             rewardsGroupBox.TabStop = false;
-            rewardsGroupBox.Text = "Rewards";
+            rewardsGroupBox.Text = "Meme rewards";
             // 
             // rewardsDataGridView
             // 
             rewardsDataGridView.AllowUserToAddRows = false;
+            rewardsDataGridView.AllowUserToDeleteRows = false;
             rewardsDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             rewardsDataGridView.Columns.AddRange(new DataGridViewColumn[] { idColumn, deleteColumn, titleColumn, twitchCostColumn, memeCostColumn, promptColumn });
             rewardsDataGridView.Dock = DockStyle.Fill;
             rewardsDataGridView.Location = new Point(168, 19);
             rewardsDataGridView.Name = "rewardsDataGridView";
             rewardsDataGridView.ReadOnly = true;
-            rewardsDataGridView.Size = new Size(523, 105);
+            rewardsDataGridView.Size = new Size(804, 105);
             rewardsDataGridView.TabIndex = 1;
             rewardsDataGridView.CellContentClick += dataGridViewRewards_CellContentClick;
             // 
@@ -159,7 +179,7 @@ namespace MemeAlertsScript.WinForms
             promptColumn.HeaderText = "Prompt";
             promptColumn.Name = "promptColumn";
             promptColumn.ReadOnly = true;
-            promptColumn.Width = 250;
+            promptColumn.Width = 350;
             // 
             // rewardsPanel
             // 
@@ -194,10 +214,10 @@ namespace MemeAlertsScript.WinForms
             // logsGroupBox
             // 
             logsGroupBox.Controls.Add(logsRichTextBox);
-            logsGroupBox.Dock = DockStyle.Fill;
-            logsGroupBox.Location = new Point(0, 186);
+            logsGroupBox.Dock = DockStyle.Bottom;
+            logsGroupBox.Location = new Point(0, 459);
             logsGroupBox.Name = "logsGroupBox";
-            logsGroupBox.Size = new Size(694, 554);
+            logsGroupBox.Size = new Size(975, 281);
             logsGroupBox.TabIndex = 3;
             logsGroupBox.TabStop = false;
             logsGroupBox.Text = "Logs";
@@ -208,15 +228,151 @@ namespace MemeAlertsScript.WinForms
             logsRichTextBox.Location = new Point(3, 19);
             logsRichTextBox.Name = "logsRichTextBox";
             logsRichTextBox.ReadOnly = true;
-            logsRichTextBox.Size = new Size(688, 532);
+            logsRichTextBox.Size = new Size(969, 259);
             logsRichTextBox.TabIndex = 0;
             logsRichTextBox.Text = "";
+            // 
+            // memeRedemptionsGroupBox
+            // 
+            memeRedemptionsGroupBox.Controls.Add(redemptionsDataGridView);
+            memeRedemptionsGroupBox.Controls.Add(redemptionsPanel);
+            memeRedemptionsGroupBox.Dock = DockStyle.Fill;
+            memeRedemptionsGroupBox.Location = new Point(0, 186);
+            memeRedemptionsGroupBox.Name = "memeRedemptionsGroupBox";
+            memeRedemptionsGroupBox.Size = new Size(975, 273);
+            memeRedemptionsGroupBox.TabIndex = 4;
+            memeRedemptionsGroupBox.TabStop = false;
+            memeRedemptionsGroupBox.Text = "Meme redemptions";
+            // 
+            // redemptionsDataGridView
+            // 
+            redemptionsDataGridView.AllowUserToAddRows = false;
+            redemptionsDataGridView.AllowUserToDeleteRows = false;
+            redemptionsDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            redemptionsDataGridView.Columns.AddRange(new DataGridViewColumn[] { rewardIdColumn, redemptionIdColumn, resolveButtonColumn, declineButtonColumn, StatusColumn, dateColumn, titleRedemptionColumn, TwitchUserColumn, MemeUserColumn, MemePointsColumn });
+            redemptionsDataGridView.Dock = DockStyle.Fill;
+            redemptionsDataGridView.Location = new Point(168, 19);
+            redemptionsDataGridView.Name = "redemptionsDataGridView";
+            redemptionsDataGridView.ReadOnly = true;
+            redemptionsDataGridView.Size = new Size(804, 251);
+            redemptionsDataGridView.TabIndex = 1;
+            redemptionsDataGridView.CellContentClick += redemptionsDataGridView_CellContentClick;
+            // 
+            // rewardIdColumn
+            // 
+            rewardIdColumn.HeaderText = "Reward Id";
+            rewardIdColumn.Name = "rewardIdColumn";
+            rewardIdColumn.ReadOnly = true;
+            rewardIdColumn.Visible = false;
+            // 
+            // redemptionIdColumn
+            // 
+            redemptionIdColumn.HeaderText = "Redemption Id";
+            redemptionIdColumn.Name = "redemptionIdColumn";
+            redemptionIdColumn.ReadOnly = true;
+            redemptionIdColumn.Visible = false;
+            // 
+            // resolveButtonColumn
+            // 
+            resolveButtonColumn.HeaderText = "";
+            resolveButtonColumn.Name = "resolveButtonColumn";
+            resolveButtonColumn.ReadOnly = true;
+            resolveButtonColumn.Width = 60;
+            // 
+            // declineButtonColumn
+            // 
+            declineButtonColumn.HeaderText = "";
+            declineButtonColumn.Name = "declineButtonColumn";
+            declineButtonColumn.ReadOnly = true;
+            declineButtonColumn.Width = 60;
+            // 
+            // StatusColumn
+            // 
+            StatusColumn.HeaderText = "Status";
+            StatusColumn.Name = "StatusColumn";
+            StatusColumn.ReadOnly = true;
+            // 
+            // dateColumn
+            // 
+            dateColumn.HeaderText = "Date";
+            dateColumn.Name = "dateColumn";
+            dateColumn.ReadOnly = true;
+            dateColumn.Width = 50;
+            // 
+            // titleRedemptionColumn
+            // 
+            titleRedemptionColumn.HeaderText = "Title";
+            titleRedemptionColumn.Name = "titleRedemptionColumn";
+            titleRedemptionColumn.ReadOnly = true;
+            titleRedemptionColumn.Width = 150;
+            // 
+            // TwitchUserColumn
+            // 
+            TwitchUserColumn.HeaderText = "Twitch user";
+            TwitchUserColumn.Name = "TwitchUserColumn";
+            TwitchUserColumn.ReadOnly = true;
+            TwitchUserColumn.Width = 120;
+            // 
+            // MemeUserColumn
+            // 
+            MemeUserColumn.HeaderText = "Meme user";
+            MemeUserColumn.Name = "MemeUserColumn";
+            MemeUserColumn.ReadOnly = true;
+            MemeUserColumn.Width = 120;
+            // 
+            // MemePointsColumn
+            // 
+            MemePointsColumn.HeaderText = "Meme points";
+            MemePointsColumn.Name = "MemePointsColumn";
+            MemePointsColumn.ReadOnly = true;
+            // 
+            // redemptionsPanel
+            // 
+            redemptionsPanel.Controls.Add(declineButton);
+            redemptionsPanel.Controls.Add(resolveButton);
+            redemptionsPanel.Controls.Add(autoResolvecheckBox);
+            redemptionsPanel.Dock = DockStyle.Left;
+            redemptionsPanel.Location = new Point(3, 19);
+            redemptionsPanel.Name = "redemptionsPanel";
+            redemptionsPanel.Size = new Size(165, 251);
+            redemptionsPanel.TabIndex = 0;
+            // 
+            // declineButton
+            // 
+            declineButton.Location = new Point(7, 82);
+            declineButton.Name = "declineButton";
+            declineButton.Size = new Size(150, 34);
+            declineButton.TabIndex = 3;
+            declineButton.Text = "Manual all decline";
+            declineButton.UseVisualStyleBackColor = true;
+            declineButton.Click += declineButton_Click;
+            // 
+            // resolveButton
+            // 
+            resolveButton.Location = new Point(7, 41);
+            resolveButton.Name = "resolveButton";
+            resolveButton.Size = new Size(150, 34);
+            resolveButton.TabIndex = 2;
+            resolveButton.Text = "Manual all resolve";
+            resolveButton.UseVisualStyleBackColor = true;
+            resolveButton.Click += resolveButton_Click;
+            // 
+            // autoResolvecheckBox
+            // 
+            autoResolvecheckBox.AutoSize = true;
+            autoResolvecheckBox.Location = new Point(12, 13);
+            autoResolvecheckBox.Name = "autoResolvecheckBox";
+            autoResolvecheckBox.Size = new Size(140, 19);
+            autoResolvecheckBox.TabIndex = 0;
+            autoResolvecheckBox.Text = "Automatically resolve";
+            autoResolvecheckBox.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(694, 740);
+            ClientSize = new Size(975, 740);
+            Controls.Add(memeRedemptionsGroupBox);
             Controls.Add(logsGroupBox);
             Controls.Add(rewardsGroupBox);
             Controls.Add(loginGroupBox);
@@ -230,6 +386,10 @@ namespace MemeAlertsScript.WinForms
             ((System.ComponentModel.ISupportInitialize)rewardsDataGridView).EndInit();
             rewardsPanel.ResumeLayout(false);
             logsGroupBox.ResumeLayout(false);
+            memeRedemptionsGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)redemptionsDataGridView).EndInit();
+            redemptionsPanel.ResumeLayout(false);
+            redemptionsPanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -246,11 +406,27 @@ namespace MemeAlertsScript.WinForms
         private Panel rewardsPanel;
         private Button createRewardButton;
         private Button refreshRewardsButton;
+        private GroupBox memeRedemptionsGroupBox;
+        private Panel redemptionsPanel;
+        private CheckBox autoResolvecheckBox;
+        private Button declineButton;
+        private Button resolveButton;
+        private DataGridView redemptionsDataGridView;
         private DataGridViewTextBoxColumn idColumn;
         private DataGridViewButtonColumn deleteColumn;
         private DataGridViewTextBoxColumn titleColumn;
         private DataGridViewTextBoxColumn twitchCostColumn;
         private DataGridViewTextBoxColumn memeCostColumn;
         private DataGridViewTextBoxColumn promptColumn;
+        private DataGridViewTextBoxColumn rewardIdColumn;
+        private DataGridViewTextBoxColumn redemptionIdColumn;
+        private DataGridViewButtonColumn resolveButtonColumn;
+        private DataGridViewButtonColumn declineButtonColumn;
+        private DataGridViewTextBoxColumn StatusColumn;
+        private DataGridViewTextBoxColumn dateColumn;
+        private DataGridViewTextBoxColumn titleRedemptionColumn;
+        private DataGridViewTextBoxColumn TwitchUserColumn;
+        private DataGridViewTextBoxColumn MemeUserColumn;
+        private DataGridViewTextBoxColumn MemePointsColumn;
     }
 }

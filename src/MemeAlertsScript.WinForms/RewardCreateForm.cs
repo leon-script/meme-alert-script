@@ -1,4 +1,5 @@
-﻿using MemeAlertsScript.Core.Models;
+﻿using MemeAlertsScript.Core.Extensions;
+using MemeAlertsScript.Core.Models;
 
 namespace MemeAlertsScript.WinForms
 {
@@ -24,7 +25,7 @@ namespace MemeAlertsScript.WinForms
             RewardResult = new CreateMemeReward
             {
                 Title = titleTextBox.Text,
-                Prompt = $"{promptRichTextBox.Text}\n[{(int)memeCostNumericUpDown.Value}]",
+                Prompt = promptRichTextBox.Text + "\n" + ((int)memeCostNumericUpDown.Value).ToMemeTag(),
                 TwitchCost = (int)twitchCostNumericUpDown.Value,
                 MemeCost = (int)memeCostNumericUpDown.Value,
             };

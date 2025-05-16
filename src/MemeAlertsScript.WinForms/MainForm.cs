@@ -2,7 +2,6 @@
 using MemeAlertsScript.Core.Models;
 using MemeAlertsScript.Twitch;
 using MemeAlertsScript.WinForms.Configs;
-using MemeAlertsScript.WinForms.Extensions;
 using MemeAlertsScript.WinForms.Logging;
 using Microsoft.Extensions.Logging;
 using TwitchLib.Api.Core.Enums;
@@ -184,11 +183,71 @@ namespace MemeAlertsScript.WinForms
         {
             _logger.LogInformation($"Reward redeemed: {reward.UserName} - {reward.Reward.Title}");
 
-            await _rewardApi.UpdateSingleRedemptionStatusAsync(
-                rewardId: reward.Reward.Id,
-                redemptionId: reward.Id,
-                status: CustomRewardRedemptionStatus.FULFILLED
-            );
+            if (reward.Reward.Prompt.HasMemeTag())
+            {
+                if (autoResolvecheckBox.Checked)
+                {
+                    await _rewardApi.UpdateSingleRedemptionStatusAsync(
+                        rewardId: reward.Reward.Id,
+                        redemptionId: reward.Id,
+                        status: CustomRewardRedemptionStatus.FULFILLED
+                    );
+                }
+
+                if (redemptionsDataGridView.InvokeRequired)
+                {
+                    redemptionsDataGridView.Invoke(() =>
+                    {
+                        var rowId = redemptionsDataGridView.Rows.Add(
+                            new object[]
+                            {
+                                reward.Reward.Id,
+                                reward.Id,
+                                "Resolve",
+                                "Decline",
+                                "",
+                                reward.RedeemedAt.ToString("HH:mm:ss"),
+                                reward.Reward.Title,
+                                reward.UserName,
+                                reward.UserInput,
+                                reward.Reward.Prompt.ParseMemeTagNumber()!,
+                            });
+
+                        if (autoResolvecheckBox.Checked)
+                        {
+                            redemptionsDataGridView.Rows[rowId].Cells[2] = new DataGridViewTextBoxCell();
+                            redemptionsDataGridView.Rows[rowId].Cells[3] = new DataGridViewTextBoxCell();
+                            redemptionsDataGridView.Rows[rowId].Cells[4].Value = "Resolved";
+                            redemptionsDataGridView.Rows[rowId].DefaultCellStyle.BackColor = Color.LightGreen;
+                        }
+                    });
+                }
+                else
+                {
+                    var rowId = redemptionsDataGridView.Rows.Add(
+                        new object[]
+                        {
+                            reward.Reward.Id,
+                            reward.Id,
+                            "Resolve",
+                            "Decline",
+                            "",
+                            reward.RedeemedAt.ToString("HH:mm:ss"),
+                            reward.Reward.Title,
+                            reward.UserName,
+                            reward.UserInput,
+                            reward.Reward.Prompt.ParseMemeTagNumber()!,
+                        });
+
+                    if (autoResolvecheckBox.Checked)
+                    {
+                        redemptionsDataGridView.Rows[rowId].Cells[2] = new DataGridViewTextBoxCell();
+                        redemptionsDataGridView.Rows[rowId].Cells[3] = new DataGridViewTextBoxCell();
+                        redemptionsDataGridView.Rows[rowId].Cells[4].Value = "Resolved";
+                        redemptionsDataGridView.Rows[rowId].DefaultCellStyle.BackColor = Color.LightGreen;
+                    }
+                }
+            }
         }
 
         private void buttonRefreshRewards_Click(object sender, EventArgs e)
@@ -229,16 +288,19 @@ namespace MemeAlertsScript.WinForms
             {
                 foreach (var reward in rewards)
                 {
-                    rewardsDataGridView.Rows.Add(
-                        new object[]
-                        {
-                            reward.Id,
-                            "Delete",
-                            reward.Title,
-                            reward.Cost,
-                            reward.Prompt.ParseTrailingBracketNumber()!,
-                            reward.Prompt
-                        });
+                    if (reward.Prompt.HasMemeTag())
+                    {
+                        rewardsDataGridView.Rows.Add(
+                            new object[]
+                            {
+                                reward.Id,
+                                "Delete",
+                                reward.Title,
+                                reward.Cost,
+                                reward.Prompt.ParseMemeTagNumber()!,
+                                reward.Prompt
+                            });
+                    }
                 }
             }
             else
@@ -276,6 +338,110 @@ namespace MemeAlertsScript.WinForms
                             _logger.LogError(exception, "Failed to delete reward {RewardId}", rewardId);
                         }
                     }
+                }
+            }
+        }
+
+        private async void redemptionsDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 2)
+            {
+                var grid = sender as DataGridView;
+                var rewardId = grid?.Rows[e.RowIndex].Cells[0].Value?.ToString();
+                var redemptionId = grid?.Rows[e.RowIndex].Cells[1].Value?.ToString();
+
+                await _rewardApi.UpdateSingleRedemptionStatusAsync(
+                    rewardId: rewardId!,
+                    redemptionId: redemptionId!,
+                    status: CustomRewardRedemptionStatus.FULFILLED
+                );
+
+                if (redemptionsDataGridView.InvokeRequired)
+                {
+                    redemptionsDataGridView.Invoke(() =>
+                    {
+                        redemptionsDataGridView.Rows[e.RowIndex].Cells[2] = new DataGridViewTextBoxCell();
+                        redemptionsDataGridView.Rows[e.RowIndex].Cells[3] = new DataGridViewTextBoxCell();
+                        redemptionsDataGridView.Rows[e.RowIndex].Cells[4].Value = "Resolved";
+                        redemptionsDataGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                    });
+                }
+                else
+                {
+                    redemptionsDataGridView.Rows[e.RowIndex].Cells[2] = new DataGridViewTextBoxCell();
+                    redemptionsDataGridView.Rows[e.RowIndex].Cells[3] = new DataGridViewTextBoxCell();
+                    redemptionsDataGridView.Rows[e.RowIndex].Cells[4].Value = "Resolved";
+                    redemptionsDataGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+            }
+            else if (e.RowIndex >= 0 && e.ColumnIndex == 3)
+            {
+                var grid = sender as DataGridView;
+                var rewardId = grid?.Rows[e.RowIndex].Cells[0].Value?.ToString();
+                var redemptionId = grid?.Rows[e.RowIndex].Cells[1].Value?.ToString();
+
+                await _rewardApi.UpdateSingleRedemptionStatusAsync(
+                    rewardId: rewardId!,
+                    redemptionId: redemptionId!,
+                    status: CustomRewardRedemptionStatus.CANCELED
+                );
+
+                if (redemptionsDataGridView.InvokeRequired)
+                {
+                    redemptionsDataGridView.Invoke(() =>
+                    {
+                        redemptionsDataGridView.Rows[e.RowIndex].Cells[2] = new DataGridViewTextBoxCell();
+                        redemptionsDataGridView.Rows[e.RowIndex].Cells[3] = new DataGridViewTextBoxCell();
+                        redemptionsDataGridView.Rows[e.RowIndex].Cells[4].Value = "Canceled";
+                        redemptionsDataGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightYellow;
+                    });
+                }
+                else
+                {
+                    redemptionsDataGridView.Rows[e.RowIndex].Cells[2] = new DataGridViewTextBoxCell();
+                    redemptionsDataGridView.Rows[e.RowIndex].Cells[3] = new DataGridViewTextBoxCell();
+                    redemptionsDataGridView.Rows[e.RowIndex].Cells[4].Value = "Canceled";
+                    redemptionsDataGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightYellow;
+                }
+            }
+        }
+
+        private async void resolveButton_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in redemptionsDataGridView.Rows)
+            {
+                if (!row.IsNewRow && string.IsNullOrEmpty(row.Cells[4].Value.ToString()))
+                {
+                    await _rewardApi.UpdateSingleRedemptionStatusAsync(
+                        rewardId: row.Cells[0].Value.ToString()!,
+                        redemptionId: row.Cells[1].Value.ToString()!,
+                        status: CustomRewardRedemptionStatus.FULFILLED
+                    );
+
+                    row.Cells[2] = new DataGridViewTextBoxCell();
+                    row.Cells[3] = new DataGridViewTextBoxCell();
+                    row.Cells[4].Value = "Resolved";
+                    row.DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+            }
+        }
+
+        private async void declineButton_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in redemptionsDataGridView.Rows)
+            {
+                if (!row.IsNewRow && string.IsNullOrEmpty(row.Cells[4].Value.ToString()))
+                {
+                    await _rewardApi.UpdateSingleRedemptionStatusAsync(
+                        rewardId: row.Cells[0].Value.ToString()!,
+                        redemptionId: row.Cells[1].Value.ToString()!,
+                        status: CustomRewardRedemptionStatus.CANCELED
+                    );
+
+                    row.Cells[2] = new DataGridViewTextBoxCell();
+                    row.Cells[3] = new DataGridViewTextBoxCell();
+                    row.Cells[4].Value = "Canceled";
+                    row.DefaultCellStyle.BackColor = Color.LightYellow;
                 }
             }
         }
