@@ -1,21 +1,25 @@
-﻿using TwitchLib.Api;
+﻿using MemeAlertsScript.Core.Extensions;
+using Microsoft.Extensions.Logging;
+using TwitchLib.Api;
 using TwitchLib.Api.Core.Enums;
+using TwitchLib.EventSub.Core.SubscriptionTypes.Channel;
 using TwitchLib.EventSub.Websockets;
 using TwitchLib.EventSub.Websockets.Core.EventArgs;
 using TwitchLib.EventSub.Websockets.Core.EventArgs.Channel;
 
 namespace MemeAlertsScript.Twitch
 {
-    public class EventSubListener
+    public class TwitchEventSubListener
     {
         private readonly EventSubWebsocketClient _eventSubWebsocketClient;
         private readonly TwitchAPI _twitchApi;
         private readonly string _broadcasterId;
         private readonly string _oauthToken;
+        private readonly ILogger _logger;
 
-        public event Action<string, string> OnRewardRedeemed;
+        public event Action<ChannelPointsCustomRewardRedemption> OnRewardRedeemed;
 
-        public EventSubListener(string appId, string appToken, string broadcasterId, string oauthToken)
+        public TwitchEventSubListener(string appId, string appToken, string broadcasterId, string oauthToken, ILogger logger)
         {
             _eventSubWebsocketClient = new EventSubWebsocketClient();
             _eventSubWebsocketClient.WebsocketConnected += OnWebsocketConnected;
@@ -30,6 +34,7 @@ namespace MemeAlertsScript.Twitch
 
             _broadcasterId = broadcasterId;
             _oauthToken = oauthToken;
+            _logger = logger;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -44,52 +49,43 @@ namespace MemeAlertsScript.Twitch
 
         private async Task OnWebsocketConnected(object sender, WebsocketConnectedArgs e)
         {
-            // _logger.LogInformation($"Websocket {_eventSubWebsocketClient.SessionId} connected!");
+            _logger.LogInformation($"Websocket {_eventSubWebsocketClient.SessionId.ToSecretPreview()} connected!");
 
             if (!e.IsRequestedReconnect)
             {
-                // subscribe to topics
-                // create condition Dictionary
-                // You need BOTH broadcaster and moderator values or EventSub returns an Error!
                 var condition = new Dictionary<string, string> { { "broadcaster_user_id", _broadcasterId }, { "moderator_user_id", _broadcasterId } };
-                // Create and send EventSubscription
                 await _twitchApi.Helix.EventSub.CreateEventSubSubscriptionAsync("channel.channel_points_custom_reward_redemption.add", "1", condition, EventSubTransportMethod.Websocket,
-                _eventSubWebsocketClient.SessionId, accessToken: _oauthToken); // "BROADCASTER_ACCESS_TOKEN_WITH_SCOPES");
-                // If you want to get Events for special Events you need to additionally add the AccessToken of the ChannelOwner to the request.
-                // https://dev.twitch.tv/docs/eventsub/eventsub-subscription-types/
+                _eventSubWebsocketClient.SessionId, accessToken: _oauthToken); // https://dev.twitch.tv/docs/eventsub/eventsub-subscription-types/
             }
         }
 
         private async Task OnWebsocketDisconnected(object sender, EventArgs e)
         {
-            // _logger.LogError($"Websocket {_eventSubWebsocketClient.SessionId} disconnected!");
+            _logger.LogError($"Websocket {_eventSubWebsocketClient.SessionId.ToSecretPreview()} disconnected!");
 
             // Don't do this in production. You should implement a better reconnect strategy with exponential backoff
             while (!await _eventSubWebsocketClient.ReconnectAsync())
             {
-                //_logger.LogError("Websocket reconnect failed!");
+                _logger.LogError("Websocket reconnect failed!");
                 await Task.Delay(1000);
             }
         }
 
         private Task OnWebsocketReconnected(object sender, EventArgs e)
         {
-            // _logger.LogWarning($"Websocket {_eventSubWebsocketClient.SessionId} reconnected");
+            _logger.LogWarning($"Websocket {_eventSubWebsocketClient.SessionId.ToSecretPreview()} reconnected");
             return Task.CompletedTask;
         }
 
         private Task OnErrorOccurred(object sender, ErrorOccuredArgs e)
         {
-            // _logger.LogError($"Websocket {_eventSubWebsocketClient.SessionId} - Error occurred!");
+            _logger.LogError($"Websocket {_eventSubWebsocketClient.SessionId.ToSecretPreview()} - Error occurred!");
             return Task.CompletedTask;
         }
 
         private Task OnRedemption(object sender, ChannelPointsCustomRewardRedemptionArgs e)
         {
-            string username = e.Notification.Payload.Event.UserName;
-            string rewardTitle = e.Notification.Payload.Event.Reward.Title;
-
-            OnRewardRedeemed?.Invoke(username, rewardTitle);
+            OnRewardRedeemed?.Invoke(e.Notification.Payload.Event);
             return Task.CompletedTask;
         }
     }

@@ -4,6 +4,8 @@ using MemeAlertsScript.Twitch;
 using MemeAlertsScript.WinForms.Configs;
 using MemeAlertsScript.WinForms.Logging;
 using Microsoft.Extensions.Logging;
+using TwitchLib.Api.Core.Enums;
+using TwitchLib.EventSub.Core.SubscriptionTypes.Channel;
 
 namespace MemeAlertsScript.WinForms
 {
@@ -12,7 +14,8 @@ namespace MemeAlertsScript.WinForms
         private readonly Configuration.AppSettings _config;
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger _logger;
-        private EventSubListener? _eventSub;
+        private TwitchEventSubListener? _eventSub;
+        private TwitchRewardApi _rewardApi;
         private TwitchAuthTokens? _authTokens;
         private TwitchBroadcaster? _broadcaster;
 
@@ -45,7 +48,7 @@ namespace MemeAlertsScript.WinForms
                 if (_eventSub != null)
                 {
                     _logger.LogDebug("Stopping EventSub listener...");
-                    _eventSub.OnRewardRedeemed -= OnRewardRedeemed;
+                    _eventSub.OnRewardRedeemed -= OnRewardRedeemedAsync;
                     await _eventSub.StopAsync(CancellationToken.None);
                     _logger.LogDebug("EventSub listener stopped.");
                 }
@@ -71,7 +74,7 @@ namespace MemeAlertsScript.WinForms
                     _config.Twitch.Scopes,
                     _loggerFactory.CreateLogger("Auth"));
 
-                var dialogResult = oauthForm.ShowDialog();
+                var dialogResult = oauthForm.ShowDialog(this);
 
                 if (dialogResult == DialogResult.OK)
                 {
@@ -89,12 +92,27 @@ namespace MemeAlertsScript.WinForms
                     var appToken = await TwitchTokenHelper.GetAppTokenAsync(_config.Twitch.AppId, _config.Twitch.AppSecret);
                     _logger.LogDebug("App token received: {AppToken}", appToken.ToSecretPreview());
 
-                    _eventSub = new EventSubListener(_config.Twitch.AppId, appToken!, _broadcaster.Id!, _authTokens.AccessToken!);
-                    _eventSub.OnRewardRedeemed += OnRewardRedeemed;
+                    _eventSub = new TwitchEventSubListener(
+                        _config.Twitch.AppId,
+                        appToken!,
+                        _broadcaster.Id!,
+                        _authTokens.AccessToken!,
+                        _loggerFactory.CreateLogger("EventSub"));
+
+                    _rewardApi = new TwitchRewardApi(
+                        _config.Twitch.AppId,
+                        _authTokens.AccessToken!,
+                        _broadcaster.Id!,
+                        _loggerFactory.CreateLogger("RedemptionApi"));
+
+                    _eventSub.OnRewardRedeemed += OnRewardRedeemedAsync;
 
                     _logger.LogInformation("Starting EventSub listener...");
                     await _eventSub.StartAsync(CancellationToken.None);
                     _logger.LogInformation("EventSub listener started.");
+
+                    CleanRewards();
+                    RefreshRewards();
                 }
                 else
                 {
@@ -105,11 +123,12 @@ namespace MemeAlertsScript.WinForms
                     textBoxTwitchLogin.Text = string.Empty;
                     buttonTwitchLogin.Enabled = true;
                     buttonTwitchLogout.Enabled = false;
+                    CleanRewards();
 
                     if (_eventSub != null)
                     {
                         _logger.LogInformation("Stopping EventSub listener (cleanup)...");
-                        _eventSub.OnRewardRedeemed -= OnRewardRedeemed;
+                        _eventSub.OnRewardRedeemed -= OnRewardRedeemedAsync;
                         await _eventSub.StopAsync(CancellationToken.None);
                         _logger.LogInformation("EventSub listener stopped.");
                     }
@@ -117,6 +136,13 @@ namespace MemeAlertsScript.WinForms
             }
             catch (Exception exception)
             {
+                _authTokens = null;
+                _broadcaster = null;
+                textBoxTwitchLogin.Text = string.Empty;
+                buttonTwitchLogin.Enabled = true;
+                buttonTwitchLogout.Enabled = false;
+                CleanRewards();
+
                 _logger.LogError(exception, "Exception occurred during authorization.");
             }
         }
@@ -136,7 +162,7 @@ namespace MemeAlertsScript.WinForms
                 if (_eventSub != null)
                 {
                     _logger.LogInformation("Stopping EventSub listener...");
-                    _eventSub.OnRewardRedeemed -= OnRewardRedeemed;
+                    _eventSub.OnRewardRedeemed -= OnRewardRedeemedAsync;
                     await _eventSub.StopAsync(CancellationToken.None);
                     _logger.LogInformation("EventSub listener stopped.");
                 }
@@ -147,11 +173,109 @@ namespace MemeAlertsScript.WinForms
             {
                 _logger.LogError(exception, "Exception occurred during logout.");
             }
+            finally
+            {
+                CleanRewards();
+            }
         }
 
-        private void OnRewardRedeemed(string userName, string rewardTitle)
+        private async void OnRewardRedeemedAsync(ChannelPointsCustomRewardRedemption reward)
         {
-            _logger.LogInformation("Reward redeemed: {User} - {Reward}", userName, rewardTitle);
+            _logger.LogInformation($"Reward redeemed: {reward.UserName} - {reward.Reward.Title}");
+
+            await _rewardApi.UpdateSingleRedemptionStatusAsync(
+                rewardId: reward.Reward.Id,
+                redemptionId: reward.Id,
+                status: CustomRewardRedemptionStatus.FULFILLED
+            );
+        }
+
+        private void buttonRefreshRewards_Click(object sender, EventArgs e)
+        {
+            CleanRewards();
+            RefreshRewards();
+        }
+
+        private async void buttonCreateReward_Click(object sender, EventArgs e)
+        {
+            var createRewardForm = new CreateRewardForm();
+            var dialogResult = createRewardForm.ShowDialog(this);
+
+            if (dialogResult == DialogResult.OK)
+            {
+                await _rewardApi.CreateCustomRewardAsync(
+                    createRewardForm.RewardResult?.Name!,
+                    createRewardForm.RewardResult!.TwitchCost,
+                    createRewardForm.RewardResult?.Prompt!,
+                    true,
+                    true);
+
+                CleanRewards();
+                RefreshRewards();
+            }
+        }
+
+        private void CleanRewards()
+        {
+            dataGridViewRewards.Rows.Clear();
+        }
+
+        private async void RefreshRewards()
+        {
+            var rewards = await _rewardApi.GetCustomRewardsAsync(_broadcaster?.Id!, true);
+
+            if (rewards != null && rewards.Count > 0)
+            {
+                foreach (var reward in rewards)
+                {
+                    dataGridViewRewards.Rows.Add(
+                        new object[]
+                        {
+                            "Delete",
+                            reward.Title,
+                            reward.Cost,
+                            reward.Prompt,
+                            reward.Id
+                        });
+                }
+            }
+            else
+            {
+                _logger.LogWarning("No rewards found or unable to retrieve rewards.");
+            }
+        }
+
+        private async void dataGridViewRewards_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 0)
+            {
+                var grid = sender as DataGridView;
+                var rewardId = grid?.Rows[e.RowIndex].Cells[4].Value?.ToString();
+
+                if (!string.IsNullOrEmpty(rewardId))
+                {
+                    var confirm = MessageBox.Show(
+                        "Are you sure you want to delete this reward?",
+                        "Confirm Deletion",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (confirm == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            await _rewardApi.DeleteCustomRewardAsync(rewardId);
+                            grid!.Rows.RemoveAt(e.RowIndex);
+
+                            _logger.LogInformation("Reward {RewardId} deleted successfully.", rewardId);
+                        }
+                        catch (Exception exception)
+                        {
+                            _logger.LogError(exception, "Failed to delete reward {RewardId}", rewardId);
+                        }
+                    }
+                }
+            }
         }
     }
 }
