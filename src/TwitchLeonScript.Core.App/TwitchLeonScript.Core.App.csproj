@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
+    <PackageReference Include="TwitchLib.Api" Version="3.9.0" />
+    <PackageReference Include="TwitchLib.EventSub.Core" Version="2.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TwitchLeonScript.Core.Common\TwitchLeonScript.Core.Common.csproj" />
+    <ProjectReference Include="..\TwitchLeonScript.Core.Meme\TwitchLeonScript.Core.Meme.csproj" />
+    <ProjectReference Include="..\TwitchLeonScript.Core.Twitch\TwitchLeonScript.Core.Twitch.csproj" />
+  </ItemGroup>
+
+</Project>
