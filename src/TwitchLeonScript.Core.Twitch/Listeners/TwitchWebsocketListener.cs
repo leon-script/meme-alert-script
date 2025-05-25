@@ -34,19 +34,23 @@ namespace TwitchLeonScript.Core.Twitch.Listeners
             _eventSubWebsocketClient.ChannelPointsCustomRewardRedemptionAdd += OnRedemption;
         }
 
-        public async Task StartAsync(string appToken, string oauthToken, string broadcasterId)
+        public async Task<bool> StartAsync(string appToken, string oauthToken, string broadcasterId)
         {
             AppToken = appToken;
             BroadcasterId = broadcasterId;
             OauthToken = oauthToken;
 
-            _twitchApi.Settings.AccessToken = AppToken!;
+            _twitchApi.Settings.AccessToken = AppToken;
             await _eventSubWebsocketClient.ConnectAsync();
+
+            return true;
         }
 
-        public async Task StopAsync()
+        public async Task<bool> StopAsync()
         {
             await _eventSubWebsocketClient.DisconnectAsync();
+
+            return true;
         }
 
         private async Task OnWebsocketConnected(object sender, WebsocketConnectedArgs e)

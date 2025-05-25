@@ -1,47 +1,47 @@
-﻿using TwitchLeonScript.Core.Common.Options;
+﻿using AutoMapper;
 using Microsoft.Extensions.Options;
+using TwitchLeonScript.Core.Common.Options;
+using TwitchLeonScript.Core.Twitch.Models;
 using TwitchLib.Api;
 using TwitchLib.Api.Core.Enums;
 using TwitchLib.Api.Helix.Models.ChannelPoints.UpdateCustomRewardRedemptionStatus;
-using TwitchLib.Api.Helix.Models.ChannelPoints.UpdateRedemptionStatus;
 
 namespace TwitchLeonScript.Core.Twitch.Services
 {
-    public class TwitchRedemptionService
+    public sealed class TwitchRedemptionService
     {
+        private readonly IMapper _mapper;
         private readonly TwitchAPI _twitchApi;
 
-        public TwitchRedemptionService(IOptions<TwitchOptions> options)
+        public TwitchRedemptionService(IMapper mapper, IOptions<TwitchOptions> options)
         {
-            _twitchApi = new TwitchAPI();
-            _twitchApi.Settings.ClientId = options.Value.AppId;
-        }
+            ArgumentNullException.ThrowIfNull(mapper);
+            ArgumentNullException.ThrowIfNull(options?.Value?.AppId);
 
-        public Task<UpdateRedemptionStatusResponse> UpdateSingleRedemptionStatusAsync(
-           string oauthToken,
-           string broadcasterId,
-           string rewardId,
-           string redemptionId,
-           CustomRewardRedemptionStatus status)
-        {
-            var redemptionIds = new List<string> { redemptionId };
-            return UpdateRedemptionStatusAsync(oauthToken, broadcasterId, rewardId, redemptionIds, status);
-        }
-
-        public async Task<UpdateRedemptionStatusResponse> UpdateRedemptionStatusAsync(
-            string oauthToken,
-            string broadcasterId,
-            string rewardId,
-            List<string> redemptionIds,
-            CustomRewardRedemptionStatus status)
-        {
-            var request = new UpdateCustomRewardRedemptionStatusRequest
+            _mapper = mapper;
+            _twitchApi = new TwitchAPI
             {
-                Status = status
+                Settings = { ClientId = options.Value.AppId }
             };
+        }
+
+        public async Task<string?> UpdateRedemptionStatusAsync(string oauthToken, TwitchRedemptionDto redemption)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(oauthToken);
+            ArgumentNullException.ThrowIfNull(redemption);
 
             _twitchApi.Settings.AccessToken = oauthToken;
-            return await _twitchApi.Helix.ChannelPoints.UpdateRedemptionStatusAsync(broadcasterId, rewardId, redemptionIds, request);
+
+            var status = _mapper.Map<CustomRewardRedemptionStatus>(redemption.Status);
+            var request = new UpdateCustomRewardRedemptionStatusRequest { Status = status };
+
+            var response = await _twitchApi.Helix.ChannelPoints.UpdateRedemptionStatusAsync(
+                redemption.BroadcasterId,
+                redemption.RewardId,
+                new List<string> { redemption.RedemptionId },
+                request);
+
+            return response.Data?.FirstOrDefault()?.Id;
         }
     }
 }

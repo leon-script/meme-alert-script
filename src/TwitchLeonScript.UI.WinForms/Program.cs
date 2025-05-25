@@ -38,7 +38,7 @@ namespace TwitchLeonScript.UI.WinForms
             // AutoMapper
             services.AddAutoMapper(cfg =>
             {
-                //cfg.AddProfile<RedemptionProfile>();
+                // TODO
             });
 
             // Forms

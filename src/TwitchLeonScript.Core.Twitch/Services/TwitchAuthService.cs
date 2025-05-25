@@ -36,7 +36,7 @@ namespace TwitchLeonScript.Core.Twitch.Services
             return null;
         }
 
-        public async Task<TwitchOAuthToken?> GetOAuthTokenAsync(string code)
+        public async Task<TwitchOAuthTokenDto?> GetOAuthTokenAsync(string code)
         {
             var parameters = new Dictionary<string, string>
             {
@@ -59,7 +59,7 @@ namespace TwitchLeonScript.Core.Twitch.Services
             var json = await response.Content.ReadAsStringAsync();
             var document = JsonDocument.Parse(json);
 
-            return new TwitchOAuthToken
+            return new TwitchOAuthTokenDto
             {
                 AccessToken = document.RootElement.GetProperty("access_token").GetString()!,
                 RefreshToken = document.RootElement.GetProperty("refresh_token").GetString()!,
@@ -69,7 +69,7 @@ namespace TwitchLeonScript.Core.Twitch.Services
             };
         }
 
-        public async Task<TwitchBroadcaster> GetBroadcasterAsync(string oauthToken)
+        public async Task<TwitchBroadcasterDto> GetBroadcasterAsync(string oauthToken)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", oauthToken);
@@ -82,7 +82,7 @@ namespace TwitchLeonScript.Core.Twitch.Services
             var document = JsonDocument.Parse(json);
             var user = document.RootElement.GetProperty("data")[0];
 
-            return new TwitchBroadcaster
+            return new TwitchBroadcasterDto
             {
                 Id = user.GetProperty("id").GetString()!,
                 Login = user.GetProperty("login").GetString()!,

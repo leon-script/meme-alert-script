@@ -2,17 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using System.Reflection;
-using TwitchLeonScript.Core.App.Commands.Bonus;
-using TwitchLeonScript.Core.App.Commands.MemeAuth;
-using TwitchLeonScript.Core.App.Commands.Redemption;
+using TwitchLeonScript.Core.App.Commands.MemeBonus;
 using TwitchLeonScript.Core.App.Commands.TwitchListener;
+using TwitchLeonScript.Core.App.Commands.TwitchRedemption;
+using TwitchLeonScript.Core.App.Queries.MemeSupporters;
+using TwitchLeonScript.Core.Common.Enums;
 using TwitchLeonScript.Core.Common.Extensions;
+using TwitchLeonScript.Core.Meme.Models;
+using TwitchLeonScript.Core.Twitch.Models;
 using TwitchLeonScript.Core.Twitch.Notifications;
 using TwitchLeonScript.UI.Common;
 using TwitchLeonScript.UI.Tokens.Infrastructure;
 using TwitchLeonScript.UI.WinForms.Models;
 using TwitchLeonScript.UI.WinForms.Wrappers;
-using TwitchLib.Api.Core.Enums;
 
 namespace TwitchLeonScript.UI.WinForms.Forms
 {
@@ -26,13 +28,13 @@ namespace TwitchLeonScript.UI.WinForms.Forms
 
         public MainForm(IServiceProvider provider, IMediator mediator, ITwitchTokenStorage twitchTokenStorage, IMemeTokenStorage memeTokenStorage)
         {
-            InitializeComponent();
+            _provider = provider;
+            _mediator = mediator;
+            _twitchTokenStorage = twitchTokenStorage;
+            _memeTokenStorage = memeTokenStorage;
+            _memeRedemptionsGridWrapper = new MemeRedemptionsGridWrapper(dgvMemeRedemptions);
 
-            this._provider = provider;
-            this._mediator = mediator;
-            this._twitchTokenStorage = twitchTokenStorage;
-            this._memeTokenStorage = memeTokenStorage;
-            this._memeRedemptionsGridWrapper = new MemeRedemptionsGridWrapper(this.dgvMemeRedemptions);
+            InitializeComponent();
         }
 
         private async void MainForm_LoadAsync(object sender, EventArgs e)
@@ -47,7 +49,7 @@ namespace TwitchLeonScript.UI.WinForms.Forms
         private async void MainForm_FormClosing(object sender, EventArgs e)
         {
             var command = new StopTwitchListenerCommand();
-            var response = await this._mediator.Send(command);
+            var response = await _mediator.Send(command);
         }
 
         async Task INotificationHandler<TwitchRedemptionReceived>.Handle(TwitchRedemptionReceived notification, CancellationToken cancellationToken)
@@ -58,13 +60,15 @@ namespace TwitchLeonScript.UI.WinForms.Forms
             // TODO ArgumentNullException
             // PARSE MEME TAG CHECK
 
-            var storedTwitchToken = this._twitchTokenStorage.Load();
+            var storedTwitchToken = _twitchTokenStorage.Load();
+
             if (storedTwitchToken == null)
             {
                 throw new ArgumentNullException(nameof(storedTwitchToken));
             }
 
-            var storedMemeToken = this._memeTokenStorage.Load();
+            var storedMemeToken = _memeTokenStorage.Load();
+
             if (storedMemeToken == null)
             {
                 throw new ArgumentNullException(nameof(storedMemeToken));
@@ -87,7 +91,7 @@ namespace TwitchLeonScript.UI.WinForms.Forms
                 twitchBroadcasterId: storedTwitchToken.BroadcasterId,
                 memeOAuthToken: storedMemeToken.OAuthToken,
                 memeBroadcasterId: storedMemeToken.BroadcasterId,
-                rowIndex: this._memeRedemptionsGridWrapper.AddNewRow(redemptionRow),
+                rowIndex: _memeRedemptionsGridWrapper.AddNewRow(redemptionRow),
                 rewardId: notification.Redemption.Reward.Id,
                 redemptionId: notification.Redemption.Id,
                 memeUsername: notification.Redemption.UserInput,
@@ -105,10 +109,10 @@ namespace TwitchLeonScript.UI.WinForms.Forms
             string memeUsername,
             int bonus)
         {
-            this._memeRedemptionsGridWrapper.UpdateRowStatus(rowIndex, MemeRedemptionStatus.InProgress);
+            _memeRedemptionsGridWrapper.UpdateRowStatus(rowIndex, MemeRedemptionStatus.InProgress);
 
             var supportersCommand = new GetMemeSupportersCommand { OAuthToken = memeOAuthToken };
-            var memeSupportersResponse = await this._mediator.Send(supportersCommand);
+            var memeSupportersResponse = await _mediator.Send(supportersCommand);
 
             var memeSupporter = memeSupportersResponse.Supporters.FirstOrDefault(x => x.Name.Equals(memeUsername));
             if (memeSupporter == null)
@@ -119,25 +123,31 @@ namespace TwitchLeonScript.UI.WinForms.Forms
             {
                 var bonusCommand = new SendMemeBonusCommand
                 {
-                    AccessToken = memeOAuthToken,
-                    UserId = memeSupporter.Id,
-                    StreamerId = memeBroadcasterId,
-                    Value = bonus
+                    OAuthToken = memeOAuthToken,
+                    MemeBonus = new MemeBonusDto
+                    {
+                        UserId = memeSupporter.Id,
+                        BroadcasterId = memeBroadcasterId,
+                        Value = bonus,
+                    },
                 };
-                await this._mediator.Send(bonusCommand);
+                await _mediator.Send(bonusCommand);
 
-                var resolveCommand = new UpdateRedemptionCommand
+                var resolveCommand = new UpdateTwitchRedemptionCommand
                 {
-                    OAauthToken = twitchOAuthToken,
-                    BroadcasterId = twitchBroadcasterId,
-                    RewardId = rewardId,
-                    RedemptionId = redemptionId,
-                    Status = CustomRewardRedemptionStatus.FULFILLED
+                    OAuthToken = twitchOAuthToken,
+                    TwitchRedemption = new TwitchRedemptionDto
+                    {
+                        BroadcasterId = twitchBroadcasterId,
+                        RedemptionId = redemptionId,
+                        RewardId = rewardId,
+                        Status = TwitchRewardRedemptionStatus.Fulfilled,
+                    },
                 };
-                await this._mediator.Send(resolveCommand);
+                await _mediator.Send(resolveCommand);
 
-                this._memeRedemptionsGridWrapper.UpdateRowStatus(rowIndex, string.Format(MemeRedemptionStatus.Resolved, bonus));
-                this._memeRedemptionsGridWrapper.ResolveRow(rowIndex);
+                _memeRedemptionsGridWrapper.UpdateRowStatus(rowIndex, string.Format(MemeRedemptionStatus.Resolved, bonus));
+                _memeRedemptionsGridWrapper.ResolveRow(rowIndex);
             }
         }
 
@@ -149,35 +159,38 @@ namespace TwitchLeonScript.UI.WinForms.Forms
             string redemptionId,
             string status)
         {
-            var declineCommand = new UpdateRedemptionCommand
+            var declineCommand = new UpdateTwitchRedemptionCommand
             {
-                OAauthToken = twitchOAuthToken,
-                BroadcasterId = twitchBroadcasterId,
-                RewardId = rewardId!,
-                RedemptionId = redemptionId!,
-                Status = CustomRewardRedemptionStatus.CANCELED
+                OAuthToken = twitchOAuthToken,
+                TwitchRedemption = new TwitchRedemptionDto
+                {
+                    BroadcasterId = twitchBroadcasterId,
+                    RedemptionId = redemptionId,
+                    RewardId = rewardId,
+                    Status = TwitchRewardRedemptionStatus.Canceled,
+                },
             };
-            await this._mediator.Send(declineCommand);
+            await _mediator.Send(declineCommand);
 
-            this._memeRedemptionsGridWrapper.UpdateRowStatus(rowIndex, status);
-            this._memeRedemptionsGridWrapper.DeclineRow(rowIndex);
+            _memeRedemptionsGridWrapper.UpdateRowStatus(rowIndex, status);
+            _memeRedemptionsGridWrapper.DeclineRow(rowIndex);
         }
 
         private async Task TwitchLoginAsync()
         {
-            var storedToken = this._twitchTokenStorage.Load();
+            var storedToken = _twitchTokenStorage.Load();
             if (storedToken == null)
             {
-                using var twitchAuthForm = this._provider.GetRequiredService<TwitchAuthForm>();
-
+                using var twitchAuthForm = _provider.GetRequiredService<TwitchAuthForm>();
                 var dialogResult = twitchAuthForm.ShowDialog(this);
+
                 if (dialogResult != DialogResult.OK)
                 {
                     await TwitchLogoutAsync();
                     return;
                 }
 
-                storedToken = this._twitchTokenStorage.Load();
+                storedToken = _twitchTokenStorage.Load();
                 if (storedToken == null)
                 {
                     await TwitchLogoutAsync();
@@ -185,11 +198,11 @@ namespace TwitchLeonScript.UI.WinForms.Forms
                 }
             }
 
-            this.txtTwitchLogin.Text = $@"{storedToken.BroadcasterName} (ID: {storedToken.BroadcasterId})";
-            this.btnTwitchLogin.Enabled = false;
-            this.btnTwitchLogout.Enabled = true;
-            this.btnTwitchRewardsEdit.Enabled = true;
-            this.btnMemeRewardCreate.Enabled = true;
+            txtTwitchLogin.Text = $@"{storedToken.BroadcasterName} (ID: {storedToken.BroadcasterId})";
+            btnTwitchLogin.Enabled = false;
+            btnTwitchLogout.Enabled = true;
+            btnTwitchRewardsEdit.Enabled = true;
+            btnMemeRewardCreate.Enabled = true;
 
             var command = new StartTwitchListenerCommand
             {
@@ -197,38 +210,49 @@ namespace TwitchLeonScript.UI.WinForms.Forms
                 OAuthToken = storedToken.OAuthToken,
                 BroadcasterId = storedToken.BroadcasterId
             };
-            var response = await this._mediator.Send(command);
+            var response = await _mediator.Send(command);
+
+            if (!response.IsSuccess)
+            {
+                MessageBox.Show("Failed to start Twitch listener. Please check your credentials and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await TwitchLogoutAsync();
+            }
         }
 
         private async Task TwitchLogoutAsync()
         {
-            this._twitchTokenStorage.Clear();
+            _twitchTokenStorage.Clear();
 
-            this.txtTwitchLogin.Text = string.Empty;
-            this.btnTwitchLogin.Enabled = true;
-            this.btnTwitchLogout.Enabled = false;
-            this.btnTwitchRewardsEdit.Enabled = false;
-            this.btnMemeRewardCreate.Enabled = false;
+            txtTwitchLogin.Text = string.Empty;
+            btnTwitchLogin.Enabled = true;
+            btnTwitchLogout.Enabled = false;
+            btnTwitchRewardsEdit.Enabled = false;
+            btnMemeRewardCreate.Enabled = false;
 
             var command = new StopTwitchListenerCommand();
-            var response = await this._mediator.Send(command);
+            var response = await _mediator.Send(command);
+
+            if (!response.IsSuccess)
+            {
+                MessageBox.Show("Failed to stop Twitch listener. Please check your credentials and try again.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void MemeLogin()
         {
-            var storedToken = this._memeTokenStorage.Load();
+            var storedToken = _memeTokenStorage.Load();
             if (storedToken == null)
             {
-                using var memeAuthForm = this._provider.GetRequiredService<MemeAuthForm>();
-
+                using var memeAuthForm = _provider.GetRequiredService<MemeAuthForm>();
                 var dialogResult = memeAuthForm.ShowDialog(this);
+
                 if (dialogResult != DialogResult.OK)
                 {
                     MemeLogout();
                     return;
                 }
 
-                storedToken = this._memeTokenStorage.Load();
+                storedToken = _memeTokenStorage.Load();
                 if (storedToken == null)
                 {
                     MemeLogout();
@@ -236,18 +260,18 @@ namespace TwitchLeonScript.UI.WinForms.Forms
                 }
             }
 
-            this.txtMemeLogin.Text = $@"{storedToken.BroadcasterName} (ID: {storedToken.BroadcasterId})";
-            this.btnMemeLogin.Enabled = false;
-            this.btnMemeLogout.Enabled = true;
+            txtMemeLogin.Text = $@"{storedToken.BroadcasterName} (ID: {storedToken.BroadcasterId})";
+            btnMemeLogin.Enabled = false;
+            btnMemeLogout.Enabled = true;
         }
 
         private void MemeLogout()
         {
-            this._memeTokenStorage.Clear();
+            _memeTokenStorage.Clear();
 
-            this.txtMemeLogin.Text = string.Empty;
-            this.btnMemeLogin.Enabled = true;
-            this.btnMemeLogout.Enabled = false;
+            txtMemeLogin.Text = string.Empty;
+            btnMemeLogin.Enabled = true;
+            btnMemeLogout.Enabled = false;
         }
 
         private async void btnTwitchLogin_Click(object sender, EventArgs e)
@@ -272,13 +296,14 @@ namespace TwitchLeonScript.UI.WinForms.Forms
 
         private void btnRedemptionsClear_Click(object sender, EventArgs e)
         {
-            this._memeRedemptionsGridWrapper.ClearRows();
+            _memeRedemptionsGridWrapper.ClearRows();
         }
 
         private void btnTwitchRewardsEdit_Click(object sender, EventArgs e)
         {
-            var storedToken = this._twitchTokenStorage.Load();
-            if (storedToken == null)
+            var storedToken = _twitchTokenStorage.Load();
+
+            if (storedToken is null)
             {
                 MessageBox.Show("Twitch token not found. Please login to Twitch first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -293,8 +318,8 @@ namespace TwitchLeonScript.UI.WinForms.Forms
 
         private void btnMemeRewardCreate_Click(object sender, EventArgs e)
         {
-            var createRewardForm = this._provider.GetRequiredService<RewardCreateForm>();
-            var dialogResult = createRewardForm.ShowDialog(this);
+            var createRewardForm = _provider.GetRequiredService<RewardCreateForm>();
+            createRewardForm.ShowDialog(this);
         }
     }
 }

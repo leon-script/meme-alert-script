@@ -10,39 +10,33 @@ namespace TwitchLeonScript.UI.Tokens.Storages
 
         public void Save(T tokens)
         {
-            if (string.IsNullOrEmpty(this.FilePath))
-            {
-                throw new ArgumentNullException(nameof(this.FilePath));
-            }
+            ArgumentNullException.ThrowIfNull(FilePath);
 
             var json = JsonSerializer.Serialize(tokens);
             var data = Encoding.UTF8.GetBytes(json);
             var encrypted = ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
-            var directoryPath = Path.GetDirectoryName(this.FilePath);
+            var directoryPath = Path.GetDirectoryName(FilePath);
 
             if (directoryPath != null)
             {
                 Directory.CreateDirectory(directoryPath);
             }
 
-            File.WriteAllBytes(this.FilePath, encrypted);
+            File.WriteAllBytes(FilePath, encrypted);
         }
 
         public T? Load()
         {
-            if (string.IsNullOrEmpty(this.FilePath))
-            {
-                throw new ArgumentNullException(nameof(this.FilePath));
-            }
+            ArgumentNullException.ThrowIfNull(FilePath);
 
-            if (!File.Exists(this.FilePath))
+            if (!File.Exists(FilePath))
             {
-                return default(T);
+                return default;
             }
 
             try
             {
-                var encrypted = File.ReadAllBytes(this.FilePath);
+                var encrypted = File.ReadAllBytes(FilePath);
                 var decrypted = ProtectedData.Unprotect(encrypted, null, DataProtectionScope.CurrentUser);
                 var json = Encoding.UTF8.GetString(decrypted);
 
@@ -50,20 +44,17 @@ namespace TwitchLeonScript.UI.Tokens.Storages
             }
             catch
             {
-                return default(T);
+                return default;
             }
         }
 
         public void Clear()
         {
-            if (string.IsNullOrEmpty(this.FilePath))
-            {
-                throw new ArgumentNullException(nameof(this.FilePath));
-            }
+            ArgumentNullException.ThrowIfNull(FilePath);
 
-            if (File.Exists(this.FilePath))
+            if (File.Exists(FilePath))
             {
-                File.Delete(this.FilePath);
+                File.Delete(FilePath);
             }
         }
     }

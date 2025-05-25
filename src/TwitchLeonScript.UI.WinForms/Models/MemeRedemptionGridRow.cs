@@ -2,13 +2,13 @@
 {
     internal sealed class MemeRedemptionGridRow
     {
-        public required string RedemptionId { get; set; }
-        public required string RewardId { get; set; }
-        public required string Status { get; set; }
-        public required string Time { get; set; }
-        public required string TwitchUsername { get; set; }
-        public required string MemeUsername { get; set; }
-        public required int MemeBonus { get; set; }
-        public required string RewardTitle { get; set; }
+        public required string RedemptionId { get; init; }
+        public required string RewardId { get; init; }
+        public required string Status { get; init; }
+        public required string Time { get; init; }
+        public required string TwitchUsername { get; init; }
+        public required string MemeUsername { get; init; }
+        public required int MemeBonus { get; init; }
+        public required string RewardTitle { get; init; }
     }
 }

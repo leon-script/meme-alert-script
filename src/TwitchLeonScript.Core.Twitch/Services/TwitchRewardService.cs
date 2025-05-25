@@ -8,12 +8,12 @@ namespace TwitchLeonScript.Core.Twitch.Services
 {
     public class TwitchRewardService
     {
-        private readonly TwitchAPI twitchApi;
+        private readonly TwitchAPI _twitchApi;
 
         public TwitchRewardService(IOptions<TwitchOptions> options)
         {
-            this.twitchApi = new TwitchAPI();
-            this.twitchApi.Settings.ClientId = options.Value.AppId;
+            _twitchApi = new TwitchAPI();
+            _twitchApi.Settings.ClientId = options.Value.AppId;
         }
 
         public async Task<List<CustomReward>> GetCustomRewardsAsync(
@@ -21,9 +21,9 @@ namespace TwitchLeonScript.Core.Twitch.Services
             string broadcasterId,
             bool onlyManageableRewards = false)
         {
-            this.twitchApi.Settings.AccessToken = oauthToken;
+            _twitchApi.Settings.AccessToken = oauthToken;
 
-            var response = await this.twitchApi.Helix.ChannelPoints.GetCustomRewardAsync(
+            var response = await _twitchApi.Helix.ChannelPoints.GetCustomRewardAsync(
                 broadcasterId: broadcasterId,
                 onlyManageableRewards: onlyManageableRewards
             );
@@ -31,7 +31,7 @@ namespace TwitchLeonScript.Core.Twitch.Services
             return response.Data.ToList();
         }
 
-        public async Task<CustomReward> CreateCustomRewardAsync(
+        public async Task<CustomReward?> CreateCustomRewardAsync(
             string oauthToken,
             string broadcasterId,
             string title,
@@ -49,9 +49,9 @@ namespace TwitchLeonScript.Core.Twitch.Services
                 IsUserInputRequired = isUserInputRequired
             };
 
-            this.twitchApi.Settings.AccessToken = oauthToken;
-            var response = await this.twitchApi.Helix.ChannelPoints.CreateCustomRewardsAsync(broadcasterId, request);
-            return response.Data.First();
+            _twitchApi.Settings.AccessToken = oauthToken;
+            var response = await _twitchApi.Helix.ChannelPoints.CreateCustomRewardsAsync(broadcasterId, request);
+            return response.Data.FirstOrDefault();
         }
     }
 }

@@ -8,21 +8,21 @@ namespace TwitchLeonScript.UI.WinForms.Wrappers
 
         public void ClearRows()
         {
-            if (this._dataGridView.InvokeRequired)
+            if (_dataGridView.InvokeRequired)
             {
-                this._dataGridView.Invoke(this._dataGridView.Rows.Clear);
+                _dataGridView.Invoke(_dataGridView.Rows.Clear);
             }
             else
             {
-                this._dataGridView.Rows.Clear();
+                _dataGridView.Rows.Clear();
             }
         }
 
         public int AddNewRow(MemeRedemptionGridRow model)
         {
-            if (this._dataGridView.InvokeRequired)
+            if (_dataGridView.InvokeRequired)
             {
-                return this._dataGridView.Invoke(() => AddRowInternal(model));
+                return _dataGridView.Invoke(() => AddRowInternal(model));
             }
             else
             {
@@ -32,9 +32,9 @@ namespace TwitchLeonScript.UI.WinForms.Wrappers
 
         public void UpdateRowStatus(int rowId, string status)
         {
-            if (this._dataGridView.InvokeRequired)
+            if (_dataGridView.InvokeRequired)
             {
-                this._dataGridView.Invoke(() => UpdateRowStatusInternal(rowId, status));
+                _dataGridView.Invoke(() => UpdateRowStatusInternal(rowId, status));
             }
             else
             {
@@ -44,9 +44,9 @@ namespace TwitchLeonScript.UI.WinForms.Wrappers
 
         public void ResolveRow(int rowId)
         {
-            if (this._dataGridView.InvokeRequired)
+            if (_dataGridView.InvokeRequired)
             {
-                this._dataGridView.Invoke(() => ResolveRowInternal(rowId));
+                _dataGridView.Invoke(() => ResolveRowInternal(rowId));
             }
             else
             {
@@ -56,9 +56,9 @@ namespace TwitchLeonScript.UI.WinForms.Wrappers
 
         public void DeclineRow(int rowId)
         {
-            if (this._dataGridView.InvokeRequired)
+            if (_dataGridView.InvokeRequired)
             {
-                this._dataGridView.Invoke(() => DeclineRowInternal(rowId));
+                _dataGridView.Invoke(() => DeclineRowInternal(rowId));
             }
             else
             {
@@ -68,8 +68,8 @@ namespace TwitchLeonScript.UI.WinForms.Wrappers
 
         private int AddRowInternal(MemeRedemptionGridRow model)
         {
-            this._dataGridView.Rows.Insert(0, 1);
-            var row = this._dataGridView.Rows[0];
+            _dataGridView.Rows.Insert(0, 1);
+            var row = _dataGridView.Rows[0];
 
             row.Cells["MemeRedemptionIdColumn"].Value = model.RedemptionId;
             row.Cells["MemeRedemptionRewardIdColumn"].Value = model.RewardId;
@@ -86,16 +86,16 @@ namespace TwitchLeonScript.UI.WinForms.Wrappers
 
         private void UpdateRowStatusInternal(int rowId, string status)
         {
-            this._dataGridView.Rows[rowId].Cells["MemeRedemptionStatusColumn"].Value = status;
+            _dataGridView.Rows[rowId].Cells["MemeRedemptionStatusColumn"].Value = status;
         }
         private void ResolveRowInternal(int rowId)
         {
-            this._dataGridView.Rows[rowId].DefaultCellStyle.BackColor = Color.LightGreen;
+            _dataGridView.Rows[rowId].DefaultCellStyle.BackColor = Color.LightGreen;
         }
 
         private void DeclineRowInternal(int rowId)
         {
-            this._dataGridView.Rows[rowId].DefaultCellStyle.BackColor = Color.LightYellow;
+            _dataGridView.Rows[rowId].DefaultCellStyle.BackColor = Color.LightYellow;
         }
     }
 }

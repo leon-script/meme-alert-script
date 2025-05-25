@@ -2,7 +2,10 @@
 using Microsoft.Extensions.Options;
 using Microsoft.Web.WebView2.Core;
 using System.Web;
-using TwitchLeonScript.Core.App.Commands.TwitchAuth;
+using TwitchLeonScript.Core.App.Queries.TwitchAppToken;
+using TwitchLeonScript.Core.App.Queries.TwitchBroadcaster;
+using TwitchLeonScript.Core.App.Queries.TwitchOAuth;
+using TwitchLeonScript.Core.App.Queries.TwitchState;
 using TwitchLeonScript.Core.Common.Options;
 using TwitchLeonScript.UI.Tokens.Infrastructure;
 using TwitchLeonScript.UI.Tokens.StoredTokens;
@@ -17,23 +20,24 @@ namespace TwitchLeonScript.UI.WinForms.Forms
 
         public TwitchAuthForm(IOptions<TwitchOptions> options, IMediator mediator, ITwitchTokenStorage tokenStorage)
         {
+            _options = options.Value;
+            _mediator = mediator;
+            _tokenStorage = tokenStorage;
+
             InitializeComponent();
-            this._options = options.Value;
-            this._mediator = mediator;
-            this._tokenStorage = tokenStorage;
         }
 
         private async void OAuthForm_Load(object sender, EventArgs e)
         {
             var command = new GetTwitchStateCommand();
-            var response = await this._mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            await this.wv2TwitchAuth.EnsureCoreWebView2Async();
-            this.wv2TwitchAuth.Source = response.Uri;
+            await wv2TwitchAuth.EnsureCoreWebView2Async();
+            wv2TwitchAuth.Source = response.Uri;
 
-            this.wv2TwitchAuth.CoreWebView2.NavigationStarting += async (s, args) =>
+            wv2TwitchAuth.CoreWebView2.NavigationStarting += async (s, args) =>
             {
-                if (args.Uri.StartsWith(this._options.RedirectUri) && args.Uri.Contains("code="))
+                if (args.Uri.StartsWith(_options.RedirectUri) && args.Uri.Contains("code="))
                 {
                     var uri = new Uri(args.Uri);
                     var query = HttpUtility.ParseQueryString(uri.Query);
@@ -48,16 +52,39 @@ namespace TwitchLeonScript.UI.WinForms.Forms
                     }
 
                     var accessTokenCommand = new GetTwitchAppTokenCommand();
-                    var accessTokenResponse = await this._mediator.Send(accessTokenCommand);
+                    var accessTokenResponse = await _mediator.Send(accessTokenCommand);
+
+                    if (accessTokenResponse is null || string.IsNullOrEmpty(accessTokenResponse.AccessToken))
+                    {
+                        MessageBox.Show("Failed to retrieve access token information. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        DialogResult = DialogResult.Abort;
+                        Close();
+                        return;
+                    }
 
                     var oauthTokenCommand = new GetTwitchOAuthCommand { Code = code };
-                    var oauthTokenResponse = await this._mediator.Send(oauthTokenCommand);
+                    var oauthTokenResponse = await _mediator.Send(oauthTokenCommand);
 
+                    if (oauthTokenResponse is null || oauthTokenResponse.OAuthToken is null || string.IsNullOrEmpty(oauthTokenResponse.OAuthToken.AccessToken))
+                    {
+                        MessageBox.Show("Failed to retrieve OAuth token information. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        DialogResult = DialogResult.Abort;
+                        Close();
+                        return;
+                    }
 
                     var broadcasterCommand = new GetTwitchBroadcasterCommand { OAuthToken = oauthTokenResponse.OAuthToken.AccessToken };
-                    var broadcasterResponse = await this._mediator.Send(broadcasterCommand);
+                    var broadcasterResponse = await _mediator.Send(broadcasterCommand);
 
-                    this._tokenStorage.Save(new StoredTwitchToken
+                    if (broadcasterResponse is null || broadcasterResponse.Broadcaster is null)
+                    {
+                        MessageBox.Show("Failed to retrieve broadcaster information. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        DialogResult = DialogResult.Abort;
+                        Close();
+                        return;
+                    }
+
+                    _tokenStorage.Save(new StoredTwitchToken
                     {
                         AccessToken = accessTokenResponse.AccessToken,
                         OAuthToken = oauthTokenResponse.OAuthToken.AccessToken,
@@ -75,7 +102,7 @@ namespace TwitchLeonScript.UI.WinForms.Forms
 
         private async void OAuthForm_FormClosed(object sender, EventArgs e)
         {
-            await this.wv2TwitchAuth.CoreWebView2.Profile.ClearBrowsingDataAsync(CoreWebView2BrowsingDataKinds.AllProfile);
+            await wv2TwitchAuth.CoreWebView2.Profile.ClearBrowsingDataAsync(CoreWebView2BrowsingDataKinds.AllProfile);
         }
     }
 }

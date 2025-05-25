@@ -1,24 +1,35 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
+using TwitchLeonScript.Core.Meme.Models;
 
 namespace TwitchLeonScript.Core.Meme.Services
 {
     public class MemeBonusService
     {
-        public async Task<bool> SendGivePointsAsync(string accessToken, string userId, string streamerId, int value)
+        private readonly HttpClient _httpClient;
+        private readonly JsonSerializerOptions _jsonOptions;
+
+        public MemeBonusService(IHttpClientFactory httpClientFactory, JsonSerializerOptions jsonOptions)
         {
-            var payload = new { userId, streamerId, value };
-            var json = JsonSerializer.Serialize(payload);
+            _httpClient = httpClientFactory.CreateClient("MemeAlerts");
+            _jsonOptions = jsonOptions;
+        }
 
-            using var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        public async Task<HttpStatusCode> SendGivePointsAsync(string oauthToken, MemeBonusDto memeBonus)
+        {
+            var json = JsonSerializer.Serialize(memeBonus, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
+            
+            using var request = new HttpRequestMessage(HttpMethod.Post, "user/give-bonus") { Content = content };
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", oauthToken);
 
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync("https://memealerts.com/api/user/give-bonus", content);
-            var result = await response.Content.ReadAsStringAsync();
+            using var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
 
-            return response.IsSuccessStatusCode;
+            return response.StatusCode;
         }
     }
 }

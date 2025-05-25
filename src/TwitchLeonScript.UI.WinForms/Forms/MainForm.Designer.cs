@@ -30,332 +30,330 @@ namespace TwitchLeonScript.UI.WinForms.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.pnlAuth = new Panel();
-            this.grpMemeAuth = new GroupBox();
-            this.btnMemeLogout = new Button();
-            this.btnMemeLogin = new Button();
-            this.txtMemeLogin = new TextBox();
-            this.grpTwitchAuth = new GroupBox();
-            this.btnTwitchLogout = new Button();
-            this.btnTwitchLogin = new Button();
-            this.txtTwitchLogin = new TextBox();
-            this.grpRedemptions = new GroupBox();
-            this.pnlRedemptionsControl = new Panel();
-            this.pnlRedemptionsClear = new Panel();
-            this.btnRedemptionsClear = new Button();
-            this.dgvMemeRedemptions = new DataGridView();
-            this.MemeRedemptionIdColumn = new DataGridViewTextBoxColumn();
-            this.MemeRedemptionRewardIdColumn = new DataGridViewTextBoxColumn();
-            this.MemeRedemptionStatusColumn = new DataGridViewTextBoxColumn();
-            this.MemeRedemptionTimeColumn = new DataGridViewTextBoxColumn();
-            this.MemeRedemptionTwitchUsernameColumn = new DataGridViewTextBoxColumn();
-            this.MemeRedemptionMemeUsernameColumn = new DataGridViewTextBoxColumn();
-            this.MemeRedemptionMemeBonusColumn = new DataGridViewTextBoxColumn();
-            this.MemeRedemptionRewardTitleColumn = new DataGridViewTextBoxColumn();
-            this.pnlRedemptionRewardsControl = new Panel();
-            this.btnTwitchRewardsEdit = new Button();
-            this.lblRedemptionsStatus = new Label();
-            this.btnMemeRewardCreate = new Button();
-            this.pnlAuth.SuspendLayout();
-            this.grpMemeAuth.SuspendLayout();
-            this.grpTwitchAuth.SuspendLayout();
-            this.grpRedemptions.SuspendLayout();
-            this.pnlRedemptionsControl.SuspendLayout();
-            this.pnlRedemptionsClear.SuspendLayout();
-            ((ISupportInitialize)this.dgvMemeRedemptions).BeginInit();
-            this.pnlRedemptionRewardsControl.SuspendLayout();
+            pnlAuth = new Panel();
+            grpMemeAuth = new GroupBox();
+            btnMemeLogout = new Button();
+            btnMemeLogin = new Button();
+            txtMemeLogin = new TextBox();
+            grpTwitchAuth = new GroupBox();
+            btnTwitchLogout = new Button();
+            btnTwitchLogin = new Button();
+            txtTwitchLogin = new TextBox();
+            grpRedemptions = new GroupBox();
+            pnlRedemptionsControl = new Panel();
+            pnlRedemptionsClear = new Panel();
+            btnRedemptionsClear = new Button();
+            dgvMemeRedemptions = new DataGridView();
+            MemeRedemptionIdColumn = new DataGridViewTextBoxColumn();
+            MemeRedemptionRewardIdColumn = new DataGridViewTextBoxColumn();
+            MemeRedemptionStatusColumn = new DataGridViewTextBoxColumn();
+            MemeRedemptionTimeColumn = new DataGridViewTextBoxColumn();
+            MemeRedemptionTwitchUsernameColumn = new DataGridViewTextBoxColumn();
+            MemeRedemptionMemeUsernameColumn = new DataGridViewTextBoxColumn();
+            MemeRedemptionMemeBonusColumn = new DataGridViewTextBoxColumn();
+            MemeRedemptionRewardTitleColumn = new DataGridViewTextBoxColumn();
+            pnlRedemptionRewardsControl = new Panel();
+            btnTwitchRewardsEdit = new Button();
+            lblRedemptionsStatus = new Label();
+            btnMemeRewardCreate = new Button();
+            pnlAuth.SuspendLayout();
+            grpMemeAuth.SuspendLayout();
+            grpTwitchAuth.SuspendLayout();
+            grpRedemptions.SuspendLayout();
+            pnlRedemptionsControl.SuspendLayout();
+            pnlRedemptionsClear.SuspendLayout();
+            ((ISupportInitialize)dgvMemeRedemptions).BeginInit();
+            pnlRedemptionRewardsControl.SuspendLayout();
             SuspendLayout();
             // 
             // pnlAuth
             // 
-            this.pnlAuth.Controls.Add(this.grpMemeAuth);
-            this.pnlAuth.Controls.Add(this.grpTwitchAuth);
-            this.pnlAuth.Dock = DockStyle.Top;
-            this.pnlAuth.Location = new Point(0, 0);
-            this.pnlAuth.Name = "pnlAuth";
-            this.pnlAuth.Size = new Size(769, 62);
-            this.pnlAuth.TabIndex = 9;
+            pnlAuth.Controls.Add(grpMemeAuth);
+            pnlAuth.Controls.Add(grpTwitchAuth);
+            pnlAuth.Dock = DockStyle.Top;
+            pnlAuth.Location = new Point(0, 0);
+            pnlAuth.Name = "pnlAuth";
+            pnlAuth.Size = new Size(769, 62);
+            pnlAuth.TabIndex = 9;
             // 
             // grpMemeAuth
             // 
-            this.grpMemeAuth.Controls.Add(this.btnMemeLogout);
-            this.grpMemeAuth.Controls.Add(this.btnMemeLogin);
-            this.grpMemeAuth.Controls.Add(this.txtMemeLogin);
-            this.grpMemeAuth.Dock = DockStyle.Left;
-            this.grpMemeAuth.Location = new Point(310, 0);
-            this.grpMemeAuth.Name = "grpMemeAuth";
-            this.grpMemeAuth.Size = new Size(310, 62);
-            this.grpMemeAuth.TabIndex = 2;
-            this.grpMemeAuth.TabStop = false;
-            this.grpMemeAuth.Text = "Meme Auth";
+            grpMemeAuth.Controls.Add(btnMemeLogout);
+            grpMemeAuth.Controls.Add(btnMemeLogin);
+            grpMemeAuth.Controls.Add(txtMemeLogin);
+            grpMemeAuth.Dock = DockStyle.Left;
+            grpMemeAuth.Location = new Point(310, 0);
+            grpMemeAuth.Name = "grpMemeAuth";
+            grpMemeAuth.Size = new Size(310, 62);
+            grpMemeAuth.TabIndex = 2;
+            grpMemeAuth.TabStop = false;
+            grpMemeAuth.Text = "Meme Auth";
             // 
             // btnMemeLogout
             // 
-            this.btnMemeLogout.Enabled = false;
-            this.btnMemeLogout.Location = new Point(117, 22);
-            this.btnMemeLogout.Name = "btnMemeLogout";
-            this.btnMemeLogout.Size = new Size(75, 23);
-            this.btnMemeLogout.TabIndex = 0;
-            this.btnMemeLogout.Text = "Logout";
-            this.btnMemeLogout.UseVisualStyleBackColor = true;
-            this.btnMemeLogout.Click += btnMemeLogout_Click;
+            btnMemeLogout.Enabled = false;
+            btnMemeLogout.Location = new Point(117, 22);
+            btnMemeLogout.Name = "btnMemeLogout";
+            btnMemeLogout.Size = new Size(75, 23);
+            btnMemeLogout.TabIndex = 0;
+            btnMemeLogout.Text = "Logout";
+            btnMemeLogout.UseVisualStyleBackColor = true;
+            btnMemeLogout.Click += btnMemeLogout_Click;
             // 
             // btnMemeLogin
             // 
-            this.btnMemeLogin.Location = new Point(12, 22);
-            this.btnMemeLogin.Name = "btnMemeLogin";
-            this.btnMemeLogin.Size = new Size(103, 23);
-            this.btnMemeLogin.TabIndex = 0;
-            this.btnMemeLogin.Text = "2. Login Meme";
-            this.btnMemeLogin.UseVisualStyleBackColor = true;
-            this.btnMemeLogin.Click += btnMemeLogin_Click;
+            btnMemeLogin.Location = new Point(12, 22);
+            btnMemeLogin.Name = "btnMemeLogin";
+            btnMemeLogin.Size = new Size(103, 23);
+            btnMemeLogin.TabIndex = 0;
+            btnMemeLogin.Text = "2. Login Meme";
+            btnMemeLogin.UseVisualStyleBackColor = true;
+            btnMemeLogin.Click += btnMemeLogin_Click;
             // 
             // txtMemeLogin
             // 
-            this.txtMemeLogin.Location = new Point(196, 22);
-            this.txtMemeLogin.Name = "txtMemeLogin";
-            this.txtMemeLogin.ReadOnly = true;
-            this.txtMemeLogin.Size = new Size(103, 23);
-            this.txtMemeLogin.TabIndex = 3;
+            txtMemeLogin.Location = new Point(196, 22);
+            txtMemeLogin.Name = "txtMemeLogin";
+            txtMemeLogin.ReadOnly = true;
+            txtMemeLogin.Size = new Size(103, 23);
+            txtMemeLogin.TabIndex = 3;
             // 
             // grpTwitchAuth
             // 
-            this.grpTwitchAuth.Controls.Add(this.btnTwitchLogout);
-            this.grpTwitchAuth.Controls.Add(this.btnTwitchLogin);
-            this.grpTwitchAuth.Controls.Add(this.txtTwitchLogin);
-            this.grpTwitchAuth.Dock = DockStyle.Left;
-            this.grpTwitchAuth.Location = new Point(0, 0);
-            this.grpTwitchAuth.Name = "grpTwitchAuth";
-            this.grpTwitchAuth.Size = new Size(310, 62);
-            this.grpTwitchAuth.TabIndex = 1;
-            this.grpTwitchAuth.TabStop = false;
-            this.grpTwitchAuth.Text = "Twitch Auth";
+            grpTwitchAuth.Controls.Add(btnTwitchLogout);
+            grpTwitchAuth.Controls.Add(btnTwitchLogin);
+            grpTwitchAuth.Controls.Add(txtTwitchLogin);
+            grpTwitchAuth.Dock = DockStyle.Left;
+            grpTwitchAuth.Location = new Point(0, 0);
+            grpTwitchAuth.Name = "grpTwitchAuth";
+            grpTwitchAuth.Size = new Size(310, 62);
+            grpTwitchAuth.TabIndex = 1;
+            grpTwitchAuth.TabStop = false;
+            grpTwitchAuth.Text = "Twitch Auth";
             // 
             // btnTwitchLogout
             // 
-            this.btnTwitchLogout.Enabled = false;
-            this.btnTwitchLogout.Location = new Point(117, 22);
-            this.btnTwitchLogout.Name = "btnTwitchLogout";
-            this.btnTwitchLogout.Size = new Size(75, 23);
-            this.btnTwitchLogout.TabIndex = 0;
-            this.btnTwitchLogout.Text = "Logout";
-            this.btnTwitchLogout.UseVisualStyleBackColor = true;
-            this.btnTwitchLogout.Click += btnTwitchLogout_Click;
+            btnTwitchLogout.Enabled = false;
+            btnTwitchLogout.Location = new Point(117, 22);
+            btnTwitchLogout.Name = "btnTwitchLogout";
+            btnTwitchLogout.Size = new Size(75, 23);
+            btnTwitchLogout.TabIndex = 0;
+            btnTwitchLogout.Text = "Logout";
+            btnTwitchLogout.UseVisualStyleBackColor = true;
+            btnTwitchLogout.Click += btnTwitchLogout_Click;
             // 
             // btnTwitchLogin
             // 
-            this.btnTwitchLogin.Location = new Point(12, 22);
-            this.btnTwitchLogin.Name = "btnTwitchLogin";
-            this.btnTwitchLogin.Size = new Size(103, 23);
-            this.btnTwitchLogin.TabIndex = 0;
-            this.btnTwitchLogin.Text = "1. Login Twitch";
-            this.btnTwitchLogin.UseVisualStyleBackColor = true;
-            this.btnTwitchLogin.Click += btnTwitchLogin_Click;
+            btnTwitchLogin.Location = new Point(12, 22);
+            btnTwitchLogin.Name = "btnTwitchLogin";
+            btnTwitchLogin.Size = new Size(103, 23);
+            btnTwitchLogin.TabIndex = 0;
+            btnTwitchLogin.Text = "1. Login Twitch";
+            btnTwitchLogin.UseVisualStyleBackColor = true;
+            btnTwitchLogin.Click += btnTwitchLogin_Click;
             // 
             // txtTwitchLogin
             // 
-            this.txtTwitchLogin.Location = new Point(196, 22);
-            this.txtTwitchLogin.Name = "txtTwitchLogin";
-            this.txtTwitchLogin.ReadOnly = true;
-            this.txtTwitchLogin.Size = new Size(103, 23);
-            this.txtTwitchLogin.TabIndex = 3;
+            txtTwitchLogin.Location = new Point(196, 22);
+            txtTwitchLogin.Name = "txtTwitchLogin";
+            txtTwitchLogin.ReadOnly = true;
+            txtTwitchLogin.Size = new Size(103, 23);
+            txtTwitchLogin.TabIndex = 3;
             // 
             // grpRedemptions
             // 
-            this.grpRedemptions.Controls.Add(this.pnlRedemptionsControl);
-            this.grpRedemptions.Controls.Add(this.dgvMemeRedemptions);
-            this.grpRedemptions.Controls.Add(this.pnlRedemptionRewardsControl);
-            this.grpRedemptions.Dock = DockStyle.Fill;
-            this.grpRedemptions.Location = new Point(0, 62);
-            this.grpRedemptions.Name = "grpRedemptions";
-            this.grpRedemptions.Size = new Size(769, 678);
-            this.grpRedemptions.TabIndex = 10;
-            this.grpRedemptions.TabStop = false;
-            this.grpRedemptions.Text = "Meme redemptions";
+            grpRedemptions.Controls.Add(pnlRedemptionsControl);
+            grpRedemptions.Controls.Add(dgvMemeRedemptions);
+            grpRedemptions.Controls.Add(pnlRedemptionRewardsControl);
+            grpRedemptions.Dock = DockStyle.Fill;
+            grpRedemptions.Location = new Point(0, 62);
+            grpRedemptions.Name = "grpRedemptions";
+            grpRedemptions.Size = new Size(769, 678);
+            grpRedemptions.TabIndex = 10;
+            grpRedemptions.TabStop = false;
+            grpRedemptions.Text = "Meme redemptions";
             // 
             // pnlRedemptionsControl
             // 
-            this.pnlRedemptionsControl.Controls.Add(this.pnlRedemptionsClear);
-            this.pnlRedemptionsControl.Dock = DockStyle.Bottom;
-            this.pnlRedemptionsControl.Location = new Point(3, 638);
-            this.pnlRedemptionsControl.Name = "pnlRedemptionsControl";
-            this.pnlRedemptionsControl.Size = new Size(763, 37);
-            this.pnlRedemptionsControl.TabIndex = 2;
+            pnlRedemptionsControl.Controls.Add(pnlRedemptionsClear);
+            pnlRedemptionsControl.Dock = DockStyle.Bottom;
+            pnlRedemptionsControl.Location = new Point(3, 638);
+            pnlRedemptionsControl.Name = "pnlRedemptionsControl";
+            pnlRedemptionsControl.Size = new Size(763, 37);
+            pnlRedemptionsControl.TabIndex = 2;
             // 
             // pnlRedemptionsClear
             // 
-            this.pnlRedemptionsClear.Controls.Add(this.btnRedemptionsClear);
-            this.pnlRedemptionsClear.Dock = DockStyle.Right;
-            this.pnlRedemptionsClear.Location = new Point(678, 0);
-            this.pnlRedemptionsClear.Name = "pnlRedemptionsClear";
-            this.pnlRedemptionsClear.Size = new Size(85, 37);
-            this.pnlRedemptionsClear.TabIndex = 5;
+            pnlRedemptionsClear.Controls.Add(btnRedemptionsClear);
+            pnlRedemptionsClear.Dock = DockStyle.Right;
+            pnlRedemptionsClear.Location = new Point(678, 0);
+            pnlRedemptionsClear.Name = "pnlRedemptionsClear";
+            pnlRedemptionsClear.Size = new Size(85, 37);
+            pnlRedemptionsClear.TabIndex = 5;
             // 
             // btnRedemptionsClear
             // 
-            this.btnRedemptionsClear.Location = new Point(5, 7);
-            this.btnRedemptionsClear.Name = "btnRedemptionsClear";
-            this.btnRedemptionsClear.Size = new Size(75, 23);
-            this.btnRedemptionsClear.TabIndex = 5;
-            this.btnRedemptionsClear.Text = "Clear list";
-            this.btnRedemptionsClear.UseVisualStyleBackColor = true;
-            this.btnRedemptionsClear.Click += btnRedemptionsClear_Click;
+            btnRedemptionsClear.Location = new Point(5, 7);
+            btnRedemptionsClear.Name = "btnRedemptionsClear";
+            btnRedemptionsClear.Size = new Size(75, 23);
+            btnRedemptionsClear.TabIndex = 5;
+            btnRedemptionsClear.Text = "Clear list";
+            btnRedemptionsClear.UseVisualStyleBackColor = true;
+            btnRedemptionsClear.Click += btnRedemptionsClear_Click;
             // 
             // dgvMemeRedemptions
             // 
-            this.dgvMemeRedemptions.AllowUserToAddRows = false;
-            this.dgvMemeRedemptions.AllowUserToDeleteRows = false;
-            this.dgvMemeRedemptions.AllowUserToResizeRows = false;
-            this.dgvMemeRedemptions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMemeRedemptions.Columns.AddRange(new DataGridViewColumn[] { this.MemeRedemptionIdColumn, this.MemeRedemptionRewardIdColumn, this.MemeRedemptionStatusColumn, this.MemeRedemptionTimeColumn, this.MemeRedemptionTwitchUsernameColumn, this.MemeRedemptionMemeUsernameColumn, this.MemeRedemptionMemeBonusColumn, this.MemeRedemptionRewardTitleColumn });
-            this.dgvMemeRedemptions.Dock = DockStyle.Fill;
-            this.dgvMemeRedemptions.Location = new Point(3, 53);
-            this.dgvMemeRedemptions.MultiSelect = false;
-            this.dgvMemeRedemptions.Name = "dgvMemeRedemptions";
-            this.dgvMemeRedemptions.ReadOnly = true;
-            this.dgvMemeRedemptions.RowHeadersVisible = false;
-            this.dgvMemeRedemptions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMemeRedemptions.ShowEditingIcon = false;
-            this.dgvMemeRedemptions.Size = new Size(763, 622);
-            this.dgvMemeRedemptions.TabIndex = 1;
+            dgvMemeRedemptions.AllowUserToAddRows = false;
+            dgvMemeRedemptions.AllowUserToDeleteRows = false;
+            dgvMemeRedemptions.AllowUserToResizeRows = false;
+            dgvMemeRedemptions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMemeRedemptions.Columns.AddRange(new DataGridViewColumn[] { MemeRedemptionIdColumn, MemeRedemptionRewardIdColumn, MemeRedemptionStatusColumn, MemeRedemptionTimeColumn, MemeRedemptionTwitchUsernameColumn, MemeRedemptionMemeUsernameColumn, MemeRedemptionMemeBonusColumn, MemeRedemptionRewardTitleColumn });
+            dgvMemeRedemptions.Dock = DockStyle.Fill;
+            dgvMemeRedemptions.Location = new Point(3, 53);
+            dgvMemeRedemptions.MultiSelect = false;
+            dgvMemeRedemptions.Name = "dgvMemeRedemptions";
+            dgvMemeRedemptions.ReadOnly = true;
+            dgvMemeRedemptions.RowHeadersVisible = false;
+            dgvMemeRedemptions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMemeRedemptions.ShowEditingIcon = false;
+            dgvMemeRedemptions.Size = new Size(763, 622);
+            dgvMemeRedemptions.TabIndex = 1;
             // 
             // MemeRedemptionIdColumn
             // 
-            this.MemeRedemptionIdColumn.HeaderText = "Hidden Redemption Id";
-            this.MemeRedemptionIdColumn.Name = "MemeRedemptionIdColumn";
-            this.MemeRedemptionIdColumn.ReadOnly = true;
-            this.MemeRedemptionIdColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-            this.MemeRedemptionIdColumn.Visible = false;
+            MemeRedemptionIdColumn.HeaderText = "Hidden Redemption Id";
+            MemeRedemptionIdColumn.Name = "MemeRedemptionIdColumn";
+            MemeRedemptionIdColumn.ReadOnly = true;
+            MemeRedemptionIdColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            MemeRedemptionIdColumn.Visible = false;
             // 
             // MemeRedemptionRewardIdColumn
             // 
-            this.MemeRedemptionRewardIdColumn.HeaderText = "Hidden Reward Id";
-            this.MemeRedemptionRewardIdColumn.Name = "MemeRedemptionRewardIdColumn";
-            this.MemeRedemptionRewardIdColumn.ReadOnly = true;
-            this.MemeRedemptionRewardIdColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-            this.MemeRedemptionRewardIdColumn.Visible = false;
+            MemeRedemptionRewardIdColumn.HeaderText = "Hidden Reward Id";
+            MemeRedemptionRewardIdColumn.Name = "MemeRedemptionRewardIdColumn";
+            MemeRedemptionRewardIdColumn.ReadOnly = true;
+            MemeRedemptionRewardIdColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            MemeRedemptionRewardIdColumn.Visible = false;
             // 
             // MemeRedemptionStatusColumn
             // 
-            this.MemeRedemptionStatusColumn.HeaderText = "Status";
-            this.MemeRedemptionStatusColumn.Name = "MemeRedemptionStatusColumn";
-            this.MemeRedemptionStatusColumn.ReadOnly = true;
-            this.MemeRedemptionStatusColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-            this.MemeRedemptionStatusColumn.Width = 150;
+            MemeRedemptionStatusColumn.HeaderText = "Status";
+            MemeRedemptionStatusColumn.Name = "MemeRedemptionStatusColumn";
+            MemeRedemptionStatusColumn.ReadOnly = true;
+            MemeRedemptionStatusColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            MemeRedemptionStatusColumn.Width = 150;
             // 
             // MemeRedemptionTimeColumn
             // 
-            this.MemeRedemptionTimeColumn.HeaderText = "Time";
-            this.MemeRedemptionTimeColumn.Name = "MemeRedemptionTimeColumn";
-            this.MemeRedemptionTimeColumn.ReadOnly = true;
-            this.MemeRedemptionTimeColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            MemeRedemptionTimeColumn.HeaderText = "Time";
+            MemeRedemptionTimeColumn.Name = "MemeRedemptionTimeColumn";
+            MemeRedemptionTimeColumn.ReadOnly = true;
+            MemeRedemptionTimeColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // MemeRedemptionTwitchUsernameColumn
             // 
-            this.MemeRedemptionTwitchUsernameColumn.HeaderText = "Twitch Username";
-            this.MemeRedemptionTwitchUsernameColumn.Name = "MemeRedemptionTwitchUsernameColumn";
-            this.MemeRedemptionTwitchUsernameColumn.ReadOnly = true;
-            this.MemeRedemptionTwitchUsernameColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-            this.MemeRedemptionTwitchUsernameColumn.Width = 140;
+            MemeRedemptionTwitchUsernameColumn.HeaderText = "Twitch Username";
+            MemeRedemptionTwitchUsernameColumn.Name = "MemeRedemptionTwitchUsernameColumn";
+            MemeRedemptionTwitchUsernameColumn.ReadOnly = true;
+            MemeRedemptionTwitchUsernameColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            MemeRedemptionTwitchUsernameColumn.Width = 140;
             // 
             // MemeRedemptionMemeUsernameColumn
             // 
-            this.MemeRedemptionMemeUsernameColumn.HeaderText = "Meme Username";
-            this.MemeRedemptionMemeUsernameColumn.Name = "MemeRedemptionMemeUsernameColumn";
-            this.MemeRedemptionMemeUsernameColumn.ReadOnly = true;
-            this.MemeRedemptionMemeUsernameColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-            this.MemeRedemptionMemeUsernameColumn.Width = 140;
+            MemeRedemptionMemeUsernameColumn.HeaderText = "Meme Username";
+            MemeRedemptionMemeUsernameColumn.Name = "MemeRedemptionMemeUsernameColumn";
+            MemeRedemptionMemeUsernameColumn.ReadOnly = true;
+            MemeRedemptionMemeUsernameColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            MemeRedemptionMemeUsernameColumn.Width = 140;
             // 
             // MemeRedemptionMemeBonusColumn
             // 
-            this.MemeRedemptionMemeBonusColumn.HeaderText = "Bonus";
-            this.MemeRedemptionMemeBonusColumn.Name = "MemeRedemptionMemeBonusColumn";
-            this.MemeRedemptionMemeBonusColumn.ReadOnly = true;
-            this.MemeRedemptionMemeBonusColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-            this.MemeRedemptionMemeBonusColumn.Width = 50;
+            MemeRedemptionMemeBonusColumn.HeaderText = "Bonus";
+            MemeRedemptionMemeBonusColumn.Name = "MemeRedemptionMemeBonusColumn";
+            MemeRedemptionMemeBonusColumn.ReadOnly = true;
+            MemeRedemptionMemeBonusColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            MemeRedemptionMemeBonusColumn.Width = 50;
             // 
             // MemeRedemptionRewardTitleColumn
             // 
-            this.MemeRedemptionRewardTitleColumn.HeaderText = "Title";
-            this.MemeRedemptionRewardTitleColumn.Name = "MemeRedemptionRewardTitleColumn";
-            this.MemeRedemptionRewardTitleColumn.ReadOnly = true;
-            this.MemeRedemptionRewardTitleColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-            this.MemeRedemptionRewardTitleColumn.Width = 180;
+            MemeRedemptionRewardTitleColumn.HeaderText = "Title";
+            MemeRedemptionRewardTitleColumn.Name = "MemeRedemptionRewardTitleColumn";
+            MemeRedemptionRewardTitleColumn.ReadOnly = true;
+            MemeRedemptionRewardTitleColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            MemeRedemptionRewardTitleColumn.Width = 180;
             // 
             // pnlRedemptionRewardsControl
             // 
-            this.pnlRedemptionRewardsControl.Controls.Add(this.btnTwitchRewardsEdit);
-            this.pnlRedemptionRewardsControl.Controls.Add(this.lblRedemptionsStatus);
-            this.pnlRedemptionRewardsControl.Controls.Add(this.btnMemeRewardCreate);
-            this.pnlRedemptionRewardsControl.Dock = DockStyle.Top;
-            this.pnlRedemptionRewardsControl.Location = new Point(3, 19);
-            this.pnlRedemptionRewardsControl.Name = "pnlRedemptionRewardsControl";
-            this.pnlRedemptionRewardsControl.Size = new Size(763, 34);
-            this.pnlRedemptionRewardsControl.TabIndex = 0;
+            pnlRedemptionRewardsControl.Controls.Add(btnTwitchRewardsEdit);
+            pnlRedemptionRewardsControl.Controls.Add(lblRedemptionsStatus);
+            pnlRedemptionRewardsControl.Controls.Add(btnMemeRewardCreate);
+            pnlRedemptionRewardsControl.Dock = DockStyle.Top;
+            pnlRedemptionRewardsControl.Location = new Point(3, 19);
+            pnlRedemptionRewardsControl.Name = "pnlRedemptionRewardsControl";
+            pnlRedemptionRewardsControl.Size = new Size(763, 34);
+            pnlRedemptionRewardsControl.TabIndex = 0;
             // 
             // btnTwitchRewardsEdit
             // 
-            this.btnTwitchRewardsEdit.Enabled = false;
-            this.btnTwitchRewardsEdit.Location = new Point(179, 1);
-            this.btnTwitchRewardsEdit.Name = "btnTwitchRewardsEdit";
-            this.btnTwitchRewardsEdit.Size = new Size(202, 23);
-            this.btnTwitchRewardsEdit.TabIndex = 3;
-            this.btnTwitchRewardsEdit.Text = "4. Open twitch rewards settings";
-            this.btnTwitchRewardsEdit.UseVisualStyleBackColor = true;
-            this.btnTwitchRewardsEdit.Click += btnTwitchRewardsEdit_Click;
+            btnTwitchRewardsEdit.Enabled = false;
+            btnTwitchRewardsEdit.Location = new Point(179, 1);
+            btnTwitchRewardsEdit.Name = "btnTwitchRewardsEdit";
+            btnTwitchRewardsEdit.Size = new Size(202, 23);
+            btnTwitchRewardsEdit.TabIndex = 3;
+            btnTwitchRewardsEdit.Text = "4. Open twitch rewards settings";
+            btnTwitchRewardsEdit.UseVisualStyleBackColor = true;
+            btnTwitchRewardsEdit.Click += btnTwitchRewardsEdit_Click;
             // 
             // lblRedemptionsStatus
             // 
-            this.lblRedemptionsStatus.AutoSize = true;
-            this.lblRedemptionsStatus.Dock = DockStyle.Right;
-            this.lblRedemptionsStatus.Location = new Point(600, 0);
-            this.lblRedemptionsStatus.Name = "lblRedemptionsStatus";
-            this.lblRedemptionsStatus.Padding = new Padding(0, 4, 0, 0);
-            this.lblRedemptionsStatus.Size = new Size(163, 19);
-            this.lblRedemptionsStatus.TabIndex = 2;
-            this.lblRedemptionsStatus.Text = "Status: awaiting authorization";
+            lblRedemptionsStatus.AutoSize = true;
+            lblRedemptionsStatus.Dock = DockStyle.Right;
+            lblRedemptionsStatus.Location = new Point(600, 0);
+            lblRedemptionsStatus.Name = "lblRedemptionsStatus";
+            lblRedemptionsStatus.Padding = new Padding(0, 4, 0, 0);
+            lblRedemptionsStatus.Size = new Size(163, 19);
+            lblRedemptionsStatus.TabIndex = 2;
+            lblRedemptionsStatus.Text = "Status: awaiting authorization";
             // 
             // btnMemeRewardCreate
             // 
-            this.btnMemeRewardCreate.Enabled = false;
-            this.btnMemeRewardCreate.Location = new Point(9, 1);
-            this.btnMemeRewardCreate.Name = "btnMemeRewardCreate";
-            this.btnMemeRewardCreate.Size = new Size(164, 23);
-            this.btnMemeRewardCreate.TabIndex = 1;
-            this.btnMemeRewardCreate.Text = "3. Create meme reward";
-            this.btnMemeRewardCreate.UseVisualStyleBackColor = true;
-            this.btnMemeRewardCreate.Click += btnMemeRewardCreate_Click;
+            btnMemeRewardCreate.Enabled = false;
+            btnMemeRewardCreate.Location = new Point(9, 1);
+            btnMemeRewardCreate.Name = "btnMemeRewardCreate";
+            btnMemeRewardCreate.Size = new Size(164, 23);
+            btnMemeRewardCreate.TabIndex = 1;
+            btnMemeRewardCreate.Text = "3. Create meme reward";
+            btnMemeRewardCreate.UseVisualStyleBackColor = true;
+            btnMemeRewardCreate.Click += btnMemeRewardCreate_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(769, 740);
-            Controls.Add(this.grpRedemptions);
-            Controls.Add(this.pnlAuth);
+            Controls.Add(grpRedemptions);
+            Controls.Add(pnlAuth);
             MinimumSize = new Size(640, 0);
             Name = "MainForm";
             Text = "twitch-leon-script";
             FormClosing += MainForm_FormClosing;
             Load += MainForm_LoadAsync;
-            this.pnlAuth.ResumeLayout(false);
-            this.grpMemeAuth.ResumeLayout(false);
-            this.grpMemeAuth.PerformLayout();
-            this.grpTwitchAuth.ResumeLayout(false);
-            this.grpTwitchAuth.PerformLayout();
-            this.grpRedemptions.ResumeLayout(false);
-            this.pnlRedemptionsControl.ResumeLayout(false);
-            this.pnlRedemptionsClear.ResumeLayout(false);
-            ((ISupportInitialize)this.dgvMemeRedemptions).EndInit();
-            this.pnlRedemptionRewardsControl.ResumeLayout(false);
-            this.pnlRedemptionRewardsControl.PerformLayout();
+            pnlAuth.ResumeLayout(false);
+            grpMemeAuth.ResumeLayout(false);
+            grpMemeAuth.PerformLayout();
+            grpTwitchAuth.ResumeLayout(false);
+            grpTwitchAuth.PerformLayout();
+            grpRedemptions.ResumeLayout(false);
+            pnlRedemptionsControl.ResumeLayout(false);
+            pnlRedemptionsClear.ResumeLayout(false);
+            ((ISupportInitialize)dgvMemeRedemptions).EndInit();
+            pnlRedemptionRewardsControl.ResumeLayout(false);
+            pnlRedemptionRewardsControl.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private GroupBox grpMemeLogin;
-        private TextBox loginMemeTextBox;
         private Panel pnlAuth;
         private GroupBox grpTwitchAuth;
         private Button btnTwitchLogout;

@@ -7,7 +7,7 @@ namespace TwitchLeonScript.UI.Tokens.Storages
     {
         public MemeTokenStorage()
         {
-            this.FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TwitchLeonScript", "memealerts.dat");
+            FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TwitchLeonScript", "memealerts.dat");
         }
     }
 }

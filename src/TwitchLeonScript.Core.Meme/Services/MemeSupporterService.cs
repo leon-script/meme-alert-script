@@ -1,33 +1,43 @@
-﻿using TwitchLeonScript.Core.Meme.Models;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text.Json;
+using TwitchLeonScript.Core.Meme.Models;
 
 namespace TwitchLeonScript.Core.Meme.Services
 {
-    public class MemeSupporterService
+    public sealed class MemeSupporterService
     {
-        public async Task<List<MemeSupporter>> GetSupportersAsync(string accessToken)
+        private readonly HttpClient _httpClient;
+        private readonly JsonSerializerOptions _jsonOptions;
+
+        public MemeSupporterService(IHttpClientFactory httpClientFactory, JsonSerializerOptions jsonOptions)
         {
-            using var httpClient = new HttpClient();
-
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://memealerts.com/api/supporters");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            request.Content = new StringContent("");
-            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            var response = await httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            var stream = await response.Content.ReadAsStreamAsync();
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var result = await JsonSerializer.DeserializeAsync<MemeSupporterListResponse>(stream, options);
-
-            return result?.Data ?? new List<MemeSupporter>();
+            _httpClient = httpClientFactory.CreateClient("MemeAlerts");
+            _jsonOptions = jsonOptions;
         }
 
-        internal class MemeSupporterListResponse
+        public async Task<List<MemeSupporterDto>> GetSupportersAsync(string accessToken)
         {
-            public List<MemeSupporter> Data { get; set; } = new();
+            using var request = new HttpRequestMessage(HttpMethod.Post, "supporters")
+            {
+                Content = new StringContent(string.Empty)
+                {
+                    Headers = { ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Json) }
+                }
+            };
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            using var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var document = await JsonDocument.ParseAsync(stream);
+
+            var dataElement = document.RootElement.GetProperty("data");
+            var supporters = JsonSerializer.Deserialize<List<MemeSupporterDto>>(dataElement.GetRawText(), _jsonOptions);
+
+            return supporters ?? new List<MemeSupporterDto>();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace TwitchLeonScript.UI.Tokens.Storages
     {
         public TwitchTokenStorage()
         {
-            this.FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TwitchLeonScript", "twitch.dat");
+            FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TwitchLeonScript", "twitch.dat");
         }
     }
 }

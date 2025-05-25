@@ -1,9 +1,12 @@
-﻿using TwitchLeonScript.Core.Common.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using TwitchLeonScript.Core.App.Mappings;
+using TwitchLeonScript.Core.Common.Options;
 using TwitchLeonScript.Core.Meme.Services;
 using TwitchLeonScript.Core.Twitch.Listeners;
 using TwitchLeonScript.Core.Twitch.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace TwitchLeonScript.Core.App
 {
@@ -22,12 +25,32 @@ namespace TwitchLeonScript.Core.App
             services.AddTransient<TwitchAuthService>();
             services.AddTransient<TwitchRewardService>();
             services.AddTransient<TwitchRedemptionService>();
-            services.AddTransient<MemeAuthService>();
+            services.AddTransient<MemeBroadcasterService>();
             services.AddTransient<MemeSupporterService>();
             services.AddTransient<MemeBonusService>();
 
             // Listeners
             services.AddSingleton<TwitchWebsocketListener>();
+
+            // AutoMapper
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<RewardStatusProfile>();
+            });
+
+            // HttpClients
+            services.AddHttpClient("MemeAlerts", client =>
+            {
+                client.BaseAddress = new Uri("https://memealerts.com/api/");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+
+            // Serializers
+            services.AddSingleton(new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
         }
     }
 }
