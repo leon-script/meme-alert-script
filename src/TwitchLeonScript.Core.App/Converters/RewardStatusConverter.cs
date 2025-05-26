@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TwitchLeonScript.Core.Common.Enums;
+using TwitchLeonScript.Core.App.Enums;
 using TwitchLib.Api.Core.Enums;
 
 namespace TwitchLeonScript.Core.App.Converters

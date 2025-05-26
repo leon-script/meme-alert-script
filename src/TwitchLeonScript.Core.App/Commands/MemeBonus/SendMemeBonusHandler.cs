@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using System.Net;
-using TwitchLeonScript.Core.Meme.Services;
+using TwitchLeonScript.Core.App.Services;
 
 namespace TwitchLeonScript.Core.App.Commands.MemeBonus
 {

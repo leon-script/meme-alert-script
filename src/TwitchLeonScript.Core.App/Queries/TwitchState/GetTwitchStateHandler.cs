@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using TwitchLeonScript.Core.Common.Options;
-using TwitchLeonScript.Core.Twitch.Helpers;
 using Microsoft.Extensions.Options;
+using TwitchLeonScript.Core.App.Helpers;
+using TwitchLeonScript.Core.App.Options;
 
 namespace TwitchLeonScript.Core.App.Queries.TwitchState
 {

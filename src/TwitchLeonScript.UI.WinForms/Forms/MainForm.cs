@@ -5,15 +5,14 @@ using System.Reflection;
 using TwitchLeonScript.Core.App.Commands.MemeBonus;
 using TwitchLeonScript.Core.App.Commands.TwitchListener;
 using TwitchLeonScript.Core.App.Commands.TwitchRedemption;
+using TwitchLeonScript.Core.App.Enums;
+using TwitchLeonScript.Core.App.Extensions;
+using TwitchLeonScript.Core.App.Models;
+using TwitchLeonScript.Core.App.Notifications;
 using TwitchLeonScript.Core.App.Queries.MemeSupporters;
-using TwitchLeonScript.Core.Common.Enums;
-using TwitchLeonScript.Core.Common.Extensions;
-using TwitchLeonScript.Core.Meme.Models;
-using TwitchLeonScript.Core.Twitch.Models;
-using TwitchLeonScript.Core.Twitch.Notifications;
-using TwitchLeonScript.UI.Common;
-using TwitchLeonScript.UI.Tokens.Infrastructure;
+using TwitchLeonScript.UI.WinForms.Common;
 using TwitchLeonScript.UI.WinForms.Models;
+using TwitchLeonScript.UI.WinForms.Tokens.Infrastructure;
 using TwitchLeonScript.UI.WinForms.Wrappers;
 
 namespace TwitchLeonScript.UI.WinForms.Forms
@@ -49,7 +48,7 @@ namespace TwitchLeonScript.UI.WinForms.Forms
         private async void MainForm_FormClosing(object sender, EventArgs e)
         {
             var command = new StopTwitchListenerCommand();
-            var response = await _mediator.Send(command);
+            await _mediator.Send(command);
         }
 
         async Task INotificationHandler<TwitchRedemptionReceived>.Handle(TwitchRedemptionReceived notification, CancellationToken cancellationToken)
@@ -60,19 +59,8 @@ namespace TwitchLeonScript.UI.WinForms.Forms
             // TODO ArgumentNullException
             // PARSE MEME TAG CHECK
 
-            var storedTwitchToken = _twitchTokenStorage.Load();
-
-            if (storedTwitchToken == null)
-            {
-                throw new ArgumentNullException(nameof(storedTwitchToken));
-            }
-
-            var storedMemeToken = _memeTokenStorage.Load();
-
-            if (storedMemeToken == null)
-            {
-                throw new ArgumentNullException(nameof(storedMemeToken));
-            }
+            var storedTwitchToken = _twitchTokenStorage.Load() ?? throw new InvalidOperationException("Stored Twitch token is missing.");
+            var storedMemeToken = _memeTokenStorage.Load() ?? throw new InvalidOperationException("Stored Meme token is missing.");
 
             var redemptionRow = new MemeRedemptionGridRow()
             {

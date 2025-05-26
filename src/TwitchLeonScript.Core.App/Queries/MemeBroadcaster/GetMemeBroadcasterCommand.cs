@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using TwitchLeonScript.Core.App.Queries.MemeBroadcaster;
 
-namespace TwitchLeonScript.Core.App.Queries.MemeAuth
+namespace TwitchLeonScript.Core.App.Queries.MemeBroadcaster
 {
     public sealed class GetMemeBroadcasterCommand : IRequest<GetMemeBroadcasterResponse>
     {

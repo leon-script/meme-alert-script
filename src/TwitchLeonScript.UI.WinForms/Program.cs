@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TwitchLeonScript.Core.Twitch.Notifications;
-using TwitchLeonScript.UI.Tokens.Infrastructure;
-using TwitchLeonScript.UI.Tokens.Storages;
+using TwitchLeonScript.Core.App.Notifications;
 using TwitchLeonScript.UI.WinForms.Forms;
+using TwitchLeonScript.UI.WinForms.Tokens.Infrastructure;
+using TwitchLeonScript.UI.WinForms.Tokens.Storages;
 
 namespace TwitchLeonScript.UI.WinForms
 {

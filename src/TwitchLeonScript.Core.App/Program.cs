@@ -2,11 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using TwitchLeonScript.Core.App.Listeners;
+using TwitchLeonScript.Core.App.Options;
+using TwitchLeonScript.Core.App.Services;
 using TwitchLeonScript.Core.App.Mappings;
-using TwitchLeonScript.Core.Common.Options;
-using TwitchLeonScript.Core.Meme.Services;
-using TwitchLeonScript.Core.Twitch.Listeners;
-using TwitchLeonScript.Core.Twitch.Services;
 
 namespace TwitchLeonScript.Core.App
 {
@@ -33,10 +32,7 @@ namespace TwitchLeonScript.Core.App
             services.AddSingleton<TwitchWebsocketListener>();
 
             // AutoMapper
-            services.AddAutoMapper(cfg =>
-            {
-                cfg.AddProfile<RewardStatusProfile>();
-            });
+            services.AddAutoMapper(cfg => cfg.AddProfile<RewardStatusProfile>());
 
             // HttpClients
             services.AddHttpClient("MemeAlerts", client =>

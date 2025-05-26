@@ -1,6 +1,6 @@
 ﻿
 using MediatR;
-using TwitchLeonScript.Core.Twitch.Listeners;
+using TwitchLeonScript.Core.App.Listeners;
 
 namespace TwitchLeonScript.Core.App.Commands.TwitchListener
 {

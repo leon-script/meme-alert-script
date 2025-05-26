@@ -18,8 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TwitchLeonScript.Core.App\TwitchLeonScript.Core.App.csproj" />
-    <ProjectReference Include="..\TwitchLeonScript.UI.Common\TwitchLeonScript.UI.Common.csproj" />
-    <ProjectReference Include="..\TwitchLeonScript.UI.Tokens\TwitchLeonScript.UI.Tokens.csproj" />
   </ItemGroup>
 
   <ItemGroup>

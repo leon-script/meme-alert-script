@@ -1,4 +1,4 @@
-﻿using TwitchLeonScript.Core.Meme.Models;
+﻿using TwitchLeonScript.Core.App.Models;
 
 namespace TwitchLeonScript.Core.App.Queries.MemeBroadcaster
 {

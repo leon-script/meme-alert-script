@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TwitchLeonScript.Core.Twitch.Services;
+using TwitchLeonScript.Core.App.Services;
 
 namespace TwitchLeonScript.Core.App.Queries.TwitchAppToken
 {

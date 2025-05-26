@@ -2,13 +2,13 @@
 using Microsoft.Extensions.Options;
 using Microsoft.Web.WebView2.Core;
 using System.Web;
+using TwitchLeonScript.Core.App.Options;
 using TwitchLeonScript.Core.App.Queries.TwitchAppToken;
 using TwitchLeonScript.Core.App.Queries.TwitchBroadcaster;
 using TwitchLeonScript.Core.App.Queries.TwitchOAuth;
 using TwitchLeonScript.Core.App.Queries.TwitchState;
-using TwitchLeonScript.Core.Common.Options;
-using TwitchLeonScript.UI.Tokens.Infrastructure;
-using TwitchLeonScript.UI.Tokens.StoredTokens;
+using TwitchLeonScript.UI.WinForms.Tokens.Infrastructure;
+using TwitchLeonScript.UI.WinForms.Tokens.StorageModels;
 
 namespace TwitchLeonScript.UI.WinForms.Forms
 {

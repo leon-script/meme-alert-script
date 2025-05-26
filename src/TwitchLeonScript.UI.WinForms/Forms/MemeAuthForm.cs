@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.Web.WebView2.Core;
 using System.Text.Json;
-using TwitchLeonScript.Core.App.Queries.MemeAuth;
-using TwitchLeonScript.Core.Meme.Models;
-using TwitchLeonScript.UI.Common.Helpers;
-using TwitchLeonScript.UI.Tokens.Infrastructure;
-using TwitchLeonScript.UI.Tokens.StoredTokens;
+using TwitchLeonScript.Core.App.Models;
+using TwitchLeonScript.Core.App.Queries.MemeBroadcaster;
+using TwitchLeonScript.UI.WinForms.Tokens.Infrastructure;
+using TwitchLeonScript.UI.WinForms.Tokens.StorageModels;
+using TwitchLeonScript.UI.WinForms.Helpers;
 
 namespace TwitchLeonScript.UI.WinForms.Forms
 {

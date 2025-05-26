@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using TwitchLeonScript.Core.Common.Extensions;
-using TwitchLeonScript.Core.Twitch.Services;
+using TwitchLeonScript.Core.App.Extensions;
+using TwitchLeonScript.Core.App.Services;
 
 namespace TwitchLeonScript.Core.App.Commands.MemeReward
 {

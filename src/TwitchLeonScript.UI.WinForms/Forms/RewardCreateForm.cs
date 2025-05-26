@@ -1,7 +1,7 @@
 ﻿using MediatR;
+using TwitchLeonScript.Core.App.Models;
 using TwitchLeonScript.Core.App.Commands.MemeReward;
-using TwitchLeonScript.Core.Meme.Models;
-using TwitchLeonScript.UI.Tokens.Infrastructure;
+using TwitchLeonScript.UI.WinForms.Tokens.Infrastructure;
 
 namespace TwitchLeonScript.UI.WinForms.Forms
 {
