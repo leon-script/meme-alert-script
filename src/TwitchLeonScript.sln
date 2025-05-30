@@ -3,13 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36109.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchLeonScript.UI.WinForms", "TwitchLeonScript.UI.WinForms\TwitchLeonScript.UI.WinForms.csproj", "{2BDB364E-A6BC-4307-B98F-86EEE3F430BF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{8568C0F1-46CE-401B-B591-B1DB4855BFE8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchLeonScript.Core.App", "TwitchLeonScript.Core.App\TwitchLeonScript.Core.App.csproj", "{AEF909CE-A8F8-4DC0-A602-2DDBC38DA94C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchLeonScript.WinForms", "TwitchLeonScript.WinForms\TwitchLeonScript.WinForms.csproj", "{2BDB364E-A6BC-4307-B98F-86EEE3F430BF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TwitchLeonScript.Core", "TwitchLeonScript.Core", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchLeonScript.Session", "TwitchLeonScript.Session\TwitchLeonScript.Session.csproj", "{00E34C7A-D163-4D9C-AA71-394A7D41321C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TwitchLeonScript.UI", "TwitchLeonScript.UI", "{8568C0F1-46CE-401B-B591-B1DB4855BFE8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchLeonScript.Application", "TwitchLeonScript.Application\TwitchLeonScript.Application.csproj", "{AEF909CE-A8F8-4DC0-A602-2DDBC38DA94C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchLeonScript.Domain", "TwitchLeonScript.Domain\TwitchLeonScript.Domain.csproj", "{49CC97A6-479C-462F-AFE9-5D1DB56F9991}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchLeonScript.Infrastructure", "TwitchLeonScript.Infrastructure\TwitchLeonScript.Infrastructure.csproj", "{D8B76C4A-D1A4-4178-9B85-372F79871439}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchLeonScript.Mapping", "TwitchLeonScript.Mapping\TwitchLeonScript.Mapping.csproj", "{32174F70-9DF5-42AA-BC27-D0623DA44956}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,17 +29,37 @@ Global
 		{2BDB364E-A6BC-4307-B98F-86EEE3F430BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BDB364E-A6BC-4307-B98F-86EEE3F430BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BDB364E-A6BC-4307-B98F-86EEE3F430BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00E34C7A-D163-4D9C-AA71-394A7D41321C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00E34C7A-D163-4D9C-AA71-394A7D41321C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00E34C7A-D163-4D9C-AA71-394A7D41321C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00E34C7A-D163-4D9C-AA71-394A7D41321C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AEF909CE-A8F8-4DC0-A602-2DDBC38DA94C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AEF909CE-A8F8-4DC0-A602-2DDBC38DA94C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEF909CE-A8F8-4DC0-A602-2DDBC38DA94C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEF909CE-A8F8-4DC0-A602-2DDBC38DA94C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49CC97A6-479C-462F-AFE9-5D1DB56F9991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49CC97A6-479C-462F-AFE9-5D1DB56F9991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49CC97A6-479C-462F-AFE9-5D1DB56F9991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49CC97A6-479C-462F-AFE9-5D1DB56F9991}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8B76C4A-D1A4-4178-9B85-372F79871439}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8B76C4A-D1A4-4178-9B85-372F79871439}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8B76C4A-D1A4-4178-9B85-372F79871439}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8B76C4A-D1A4-4178-9B85-372F79871439}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32174F70-9DF5-42AA-BC27-D0623DA44956}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32174F70-9DF5-42AA-BC27-D0623DA44956}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32174F70-9DF5-42AA-BC27-D0623DA44956}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32174F70-9DF5-42AA-BC27-D0623DA44956}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2BDB364E-A6BC-4307-B98F-86EEE3F430BF} = {8568C0F1-46CE-401B-B591-B1DB4855BFE8}
+		{00E34C7A-D163-4D9C-AA71-394A7D41321C} = {8568C0F1-46CE-401B-B591-B1DB4855BFE8}
 		{AEF909CE-A8F8-4DC0-A602-2DDBC38DA94C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{49CC97A6-479C-462F-AFE9-5D1DB56F9991} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D8B76C4A-D1A4-4178-9B85-372F79871439} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{32174F70-9DF5-42AA-BC27-D0623DA44956} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FE4080C4-7F03-49E7-B92A-9E48D005C566}
